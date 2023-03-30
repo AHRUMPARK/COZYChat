@@ -1,0 +1,8 @@
+.sideNave_container {
+    background-color: aqua;
+    width: 25vw;
+}
+
+.sideNave_container img{
+    height: 100vh;
+}

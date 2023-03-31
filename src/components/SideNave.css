@@ -1,8 +1,19 @@
 .sideNave_container {
-    background-color: aqua;
+    background-color: rgb(255, 255, 255);
     width: 25vw;
+    z-index: -10;
 }
 
 .sideNave_container img{
     height: 100vh;
+    animation-name: backImg;
+    animation-duration: 12s;
+    animation-iteration-count: infinite;
+   
+}
+
+@keyframes backImg {
+0%   {transform:  translatey(0px)}
+/* 25%   {transform:  translatex(10px)} */
+50%  {transform: translatey(-20px)}
 }

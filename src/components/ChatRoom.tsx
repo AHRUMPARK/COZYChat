@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
-import ChatNave from './ChatNave'
-import SideNave from './SideNave'
+import ChatNave from './ChatNave';
+import SideNave from './SideNave';
 import userNameProps from '../App';
-
 import './ChatRoom.css';
 
 interface userNameProps {
@@ -11,25 +10,35 @@ interface userNameProps {
 }
 
 export default function ChatRoom(props: userNameProps) {
-  const [name, setName] = useState<string | null>(null); 
-  const [notice, setNotice] = useState<string | null>(null);
+  // const [isConnected, setIsConnected] = useState(io('http://localhost:3010'));
 
-  const [nicknameList, setNickname] = useState<string[]>()
+  const [name, setName] = useState<string | null>(null);
+  const [nicknameList, setNickname] = useState<string[]>();
   let chatBodyRef = useRef<HTMLDivElement | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
 
-  let socket: any = null;
+  // let socket: any = null;
+  let socket = io('http://localhost:3010');
+  // 연결
 
-  const ENDPOINT = 'http://localhost:3010';
+  const btnSend = () => {
+    const input = document.getElementById('msgBox') as HTMLInputElement;
+    // dm 용
+    // const to = document.getElementById('members').value;
+    // socket.emit('sendMSG', { message });
+    socket.emit('sendMSG', { msg: input.value });
+    input.value = '';
+  };
 
   useEffect(() => {
-    socket = io(ENDPOINT);
-    // socket = io('http://localhost:3010');
-
+    // let socket = io('http://localhost:3010');
+    // function onConnect() {
+    //   setIsConnected(true);
+    // }
     socket.on('connect', () => {
       console.log('server connected');
 
       //state는 초기값을 가져와서....null
-
       socket.emit('username', props.sendName);
       setName(props.sendName);
     });
@@ -66,7 +75,6 @@ export default function ChatRoom(props: userNameProps) {
       //   option.value = value;
       //   member_list.appendChild(option);
       // }
-
     });
 
     // 공지 ( 유저 입장 & 퇴장 알림 )
@@ -85,6 +93,10 @@ export default function ChatRoom(props: userNameProps) {
       // setNotice(msg);
     });
 
+    // socket.on('disconnect', () => {
+    //   console.log('임시 끊기...................');
+    // });
+
     // 메세지 받기
     socket.on('newMSG', (json: { username: string; msg: string }) => {
       console.log('이거 json값 콘솔 찍힘? ', json);
@@ -94,117 +106,113 @@ export default function ChatRoom(props: userNameProps) {
       // const outer_div = document.createElement('div');
       const div = document.createElement('div');
 
-      div.textContent = `${json.username} '  ' ${json.msg}`;
+      div.textContent = `${json.username} + '  ' + ${json.msg}`;
       chat_box_body.appendChild(div);
       // 클래스 밖, 메세지 안?
       // if (my_id === json.from )
       // console.log('json.form :', from);
       // div.textContent = json.username + " : "+ json.msg;
     });
-
   }, []);
-  
-    // useEffect(() => {
-    //   socket.on('message', (message) => {
-    //     setMassage([...messages, message]);
-    //   });
-    //   // socket.on('roo')
-    // }, []);
 
-    // // 메세지 보내기 버튼
-    // const btnSend = (event) => {
-    //   event.prevntDefault();
-    //   if (message) {
-    //     socket.emit('sendMessage', message, ()=> setMessage(''));
-    //   };
+  // useEffect(() => {
+  //   socket.on('message', (message) => {
+  //     setMassage([...messages, message]);
+  //   });
+  //   // socket.on('roo')
+  // }, []);
 
-  
-    
+  // // 메세지 보내기 버튼
+  // const btnSend = (event) => {
+  //   event.prevntDefault();
+  //   if (message) {
+  //     socket.emit('sendMessage', message, ()=> setMessage(''));
+  //   };
 
-
-
-  // 메세지 보내기 버튼
-  const btnSend = () => {
-    const input = document.getElementById('msgBox') as HTMLInputElement;
-    // dm 용
-    // 어떤 사람인지 보낼 때, 정보도 같이 보낸다 to
-    // const to = document.getElementById('members').value; 
-    // { to : to}
-    socket.emit("sendMSG", {msg : input.value})
-    input.value = '';
-  };
-
-  const enterkey = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      btnSend();
-    }
-  };
+  // // 메세지 보내기 버튼
+  // const btnSend = () => {
+  //   const input = document.getElementById('msgBox') as HTMLInputElement;
+  //   // dm 용
+  //   // 어떤 사람인지 보낼 때, 정보도 같이 보낸다 to
+  //   // const to = document.getElementById('members').value;
+  //   // { to : to}
+  //   socket.emit("sendMSG", {msg : input.value})
+  //   input.value = '';
+  // };
 
   return (
     <>
-      <ChatNave />
-      <div className="chatRoom_page">
-        <SideNave />
+      <section>
+        <ChatNave />
+        <div className="chatRoom_page">
+          <SideNave />
 
-        <div className="chatRoom_container">
-          {/* 공지구간 */}
-          <div></div>
+          <div className="chatRoom_container">
+            {/* 공지구간 */}
+            <div></div>
 
-          {/* 채팅 로그 구간 */}
+            {/* 채팅 로그 구간 */}
 
-          <div className="row">
-            <div className="chat-box-body" ref={chatBodyRef}>
-              <div className="chat right user">나</div>
-              <div className="chat_log Right">I'm speech bubble</div>
-              <div className="chat right time">오전 12:24</div>
+            <div className="row">
+              <div className="chat-box-body" ref={chatBodyRef}>
+                <div className="chat right user">나</div>
+                <div className="chat_log Right">I'm speech bubble</div>
+                <div className="chat right time">오전 12:24</div>
 
-              <div className="chat left user">상대방</div>
-              <div className="chat_log Left">I'm speech bubble</div>
-              <div className="chat left time">오전 12:30</div>
+                <div className="chat left user">상대방</div>
+                <div className="chat_log Left">I'm speech bubble</div>
+                <div className="chat left time">오전 12:30</div>
+              </div>
+            </div>
+            {/* <div className="notice"></div> */}
+
+            {/* 채팅 입력 구간 */}
+
+            <div className="chat_input">
+              <div>
+                <select id="members">
+                  <option>전체</option>
+                  {nicknameList && nicknameList.length > 0 ? (
+                    <>
+                      {nicknameList &&
+                        nicknameList.map((el) => {
+                          return (
+                            <>
+                              <option>{el}</option>
+                            </>
+                          );
+                        })}
+                    </>
+                  ) : (
+                    <div>no user...</div>
+                  )}
+                  ;
+                </select>
+              </div>
+              <form className="form">
+                <input
+                  type="text"
+                  id="msgBox"
+                  placeholder="메세지를 입력하세요.."
+                  // onChange={onSendMSG}
+                  onKeyDown={(e) => {
+                    if (e.key == 'Enter') {
+                      e.preventDefault(); // 기본 동작 막기
+                      btnSend();
+                    }
+                  }}
+                />
+
+                <button
+                  type="button"
+                  className="sendBtn"
+                  onClick={btnSend}
+                ></button>
+              </form>
             </div>
           </div>
-          {/* <div className="notice"></div> */}
-
-          {/* 채팅 입력 구간 */}
-          <div className="chat_input">
-            <form>
-              <input
-                type="text"
-                id="msgBox"
-                placeholder="메세지를 입력하세요.."
-                onKeyDown={(e) => {
-                  if (e.key == 'Enter') {
-                    e.preventDefault(); // 기본 동작 막기
-                    btnSend();
-                  }
-                }}
-              />
-              <select id="members">
-                <option>전체</option>
-                {nicknameList && nicknameList.length > 0 ? (
-                  <>
-                  {nicknameList &&
-                  nicknameList.map((el) => {
-                    return (
-                      <>
-                        <option>{el}</option>
-                      </>
-                    );
-                  })}
-                  </>
-                ):(
-                  <div>no user...</div>
-                )};
-                
-              </select>
-
-              <button type="button" className="sendBtn" onClick={btnSend}>
-                send
-              </button>
-            </form>
-          </div>
         </div>
-      </div>
+      </section>
     </>
   );
 }

@@ -1,15 +1,15 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 var socket_io_1 = require("socket.io");
 // let interval: number = 3000;
 // cors 설정
 var socket = function (server) {
     var io = new socket_io_1.Server(server, {
         cors: {
-            origin: '*',
-        },
+            origin: '*'
+        }
     });
-    // 최초 입장 & 서버 알림 
+    // 최초 입장 & 서버 알림
     // 닉네임 받기 => 소켓 아이디와 닉네임 맞춰주기
     // { 소켓 아이디 : "닉네임", 소켓아이디: "닉네임" } 키 벨류로 한명씩 추가
     // 유저 리스트
@@ -17,14 +17,14 @@ var socket = function (server) {
     io.on('connect', function (socket) {
         console.log("\uC0C8\uB85C\uC6B4 \uC720\uC800 ".concat(socket.id, " \uC5F0\uACB0"));
         // 통신하는 고유 소캣 아이디 클라이언트에게 보내기
-        socket.emit('info', socket.id);
+        console.log('info 보내고 있냐' + socket.id);
         // io.emit('notice', socket.id + '님이 입장하셨습니다.');
         socket.on('username', function (name) {
             // [socket.id] 키 : name 값
             userList[socket.id] = name;
-            console.log('sssss', userList[socket.id]);
             console.log('userList=!!!!!!!!:', userList);
-            // io.emit('list', userList);
+            io.emit('list', userList);
+            socket.emit('info', socket.id);
             io.emit('notice', name + ' 님이 입장하셨습니다.');
         });
         // sendMSG 이벤트 json 형태
@@ -33,8 +33,6 @@ var socket = function (server) {
             json['from'] = socket.id;
             // json {msg : ~~~, from : ~~~, to : ~~~}
             json['username'] = userList[socket.id];
-            console.log('ttttttttttttttttttt', json);
-            console.log('userList[socket.id]', userList[socket.id]);
             // json {msg : ~~~, from : ~~~, username: ~~~ ,  to : ~~~}
             json['is_dm'] = false; //디엠일때만 true
             // if (json.to === '전체') io.emit('newMSG', json);
@@ -64,4 +62,4 @@ var socket = function (server) {
         });
     });
 };
-exports.default = socket;
+exports["default"] = socket;

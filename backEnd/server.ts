@@ -8,6 +8,7 @@ import * as path from 'path';
 const PORT = 3010;
 
 const app = express();
+
 // server instance
 const server = http.createServer(app);
 app.use(express.static(path.join(__dirname, 'public'))); // 요청시 기본 경로 설정

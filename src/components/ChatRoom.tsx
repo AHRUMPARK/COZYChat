@@ -1,75 +1,73 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { io } from 'socket.io-client';
+
 import ChatNave from './ChatNave';
 import SideNave from './SideNave';
 import userNameProps from '../App';
 import './ChatRoom.css';
+import socket from '../util/socket';
 
 interface userNameProps {
   sendName: string;
 }
 
-export default function ChatRoom(props: userNameProps) {
-  // const [isConnected, setIsConnected] = useState(io('http://localhost:3010'));
+// interface my_ID {
+//   my_id: string;
+// }
 
+export default function ChatRoom(props: userNameProps) {
   const [name, setName] = useState<string | null>(null);
   const [nicknameList, setNickname] = useState<string[]>();
   let chatBodyRef = useRef<HTMLDivElement | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
-  // let socket: any = null;
-  let socket = io('http://localhost:3010');
-  // 연결
-
   const btnSend = () => {
     const input = document.getElementById('msgBox') as HTMLInputElement;
     // dm 용
     // const to = document.getElementById('members').value;
-    // socket.emit('sendMSG', { message });
     socket.emit('sendMSG', { msg: input.value });
     input.value = '';
   };
 
-  useEffect(() => {
-    // let socket = io('http://localhost:3010');
-    // function onConnect() {
-    //   setIsConnected(true);
-    // }
-    socket.on('connect', () => {
-      console.log('server connected');
+  let userList: string[];
+  let my_id: string | null;
 
-      //state는 초기값을 가져와서....null
-      socket.emit('username', props.sendName);
-      setName(props.sendName);
-    });
+  useEffect(() => {
+    socket.emit('username', props.sendName);
+    // setName(props.sendName);
 
     // 서버에서 소켓 아이디 받기
-    let my_id = '';
     socket.on('info', (socketID: string) => {
-      // setName(socketID);
+      console.log('socketID', socketID);
+
       my_id = socketID;
+
       console.log('소켓아이디 my_id:', my_id);
+
+      setName(socketID);
     });
 
     // 실시간 디엠 리스트
-    socket.on('list', (list: string[]) => {
-      // if (typeof list !== null)
+    socket.on('list', (list) => {
+      console.log('list', list);
       setNickname(list);
-      // console.log('list란?', list);
-      // const member_list = document.getElementById('members') as HTMLSelectElement;
-      // // 첫번째 자식이 있으면, 실행 > 셀렉박스 마지막요소를 지운다
-      // // Select box option tag 모두 지우기?
-      // while(member_list.firstChild) member_list.removeChild(member_list.lastChild);
+
+      // const member_list = document.getElementById(
+      //   'members'
+      // ) as HTMLSelectElement;
+      // 첫번째 자식이 있으면, 실행 > 셀렉박스 마지막요소를 지운다
+      // Select box option tag 모두 지우기?
+      // while (member_list.firstChild)
+      // member_list.removeChild(member_list.lastChild);
       // const option = document.createElement('option') as HTMLOptionElement;
-      // option.text = '전체'
-      // option.value = '전체'
+      // option.text = '전체';
+      // option.value = 'all'; // 서버로 보내지는값
 
       // // 옵션 추가
       // member_list.appendChild(option);
 
-      // // 접속 인원 디엠 셀렉박스 리스트
+      // 접속 인원 디엠 셀렉박스 리스트
       // console.log(Object.entries(list));
-      // for (let [key, value] of Object.entries(list)){
+      // for (let [key, value] of Object.entries(list)) {
       //   const option = document.createElement('option') as HTMLOptionElement;
       //   option.text = value;
       //   option.value = value;
@@ -93,10 +91,6 @@ export default function ChatRoom(props: userNameProps) {
       // setNotice(msg);
     });
 
-    // socket.on('disconnect', () => {
-    //   console.log('임시 끊기...................');
-    // });
-
     // 메세지 받기
     socket.on('newMSG', (json: { username: string; msg: string }) => {
       console.log('이거 json값 콘솔 찍힘? ', json);
@@ -115,30 +109,9 @@ export default function ChatRoom(props: userNameProps) {
     });
   }, []);
 
-  // useEffect(() => {
-  //   socket.on('message', (message) => {
-  //     setMassage([...messages, message]);
-  //   });
-  //   // socket.on('roo')
-  // }, []);
-
-  // // 메세지 보내기 버튼
-  // const btnSend = (event) => {
-  //   event.prevntDefault();
-  //   if (message) {
-  //     socket.emit('sendMessage', message, ()=> setMessage(''));
-  //   };
-
-  // // 메세지 보내기 버튼
-  // const btnSend = () => {
-  //   const input = document.getElementById('msgBox') as HTMLInputElement;
-  //   // dm 용
-  //   // 어떤 사람인지 보낼 때, 정보도 같이 보낸다 to
-  //   // const to = document.getElementById('members').value;
-  //   // { to : to}
-  //   socket.emit("sendMSG", {msg : input.value})
-  //   input.value = '';
-  // };
+  console.log('nicknameList?', nicknameList);
+  // console.log('my_id', my_id);
+  console.log(name);
 
   return (
     <>
@@ -170,23 +143,21 @@ export default function ChatRoom(props: userNameProps) {
 
             <div className="chat_input">
               <div>
-                <select id="members">
-                  <option>전체</option>
-                  {nicknameList && nicknameList.length > 0 ? (
+                <select id="members" defaultValue="전체">
+                  <option value="all">전체</option>
+                  {nicknameList && nicknameList.length > 0 && (
                     <>
-                      {nicknameList &&
-                        nicknameList.map((el) => {
-                          return (
-                            <>
-                              <option>{el}</option>
-                            </>
-                          );
-                        })}
+                      {nicknameList.map((person, my_id) => {
+                        return (
+                          <option key={my_id} value={person}>
+                            {person}
+                          </option>
+                        );
+                      })}
                     </>
-                  ) : (
-                    <div>no user...</div>
+                    // ) : (
+                    //   <div>no user...</div>
                   )}
-                  ;
                 </select>
               </div>
               <form className="form">

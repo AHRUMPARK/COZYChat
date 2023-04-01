@@ -4,6 +4,7 @@ import backImg from '../src/assets/back_img.jpg';
 import style from './App.module.css';
 import ChatRoom from './components/ChatRoom';
 import TestRoom from './components/TestRoom';
+// import ChattingRoom from './components/ChattingRoom';
 
 export type userNameProps = {
   name: string;
@@ -33,6 +34,7 @@ function App() {
       {start === true ? (
         <ChatRoom sendName={nickNameRef.current!.value} />
       ) : (
+        // <ChattingRoom />
         <div className={style.main_container}>
           <img className={style.backImg} src={backImg} alt="백이미지" />
           <div className={style.info_container}>

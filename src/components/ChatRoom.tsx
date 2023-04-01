@@ -15,7 +15,8 @@ interface userNameProps {
 // }
 
 export default function ChatRoom(props: userNameProps) {
-  const [name, setName] = useState<string | null>(null);
+  // const [issocketID, setIsSocketID] = useState<string[]>();
+  const [issocketID, setIsSocketID] = useState<string[] | null>(null);
   const [nicknameList, setNickname] = useState<string[]>();
   let chatBodyRef = useRef<HTMLDivElement | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -29,7 +30,7 @@ export default function ChatRoom(props: userNameProps) {
   };
 
   let userList: string[];
-  let my_id: string | null;
+  let my_id: string;
 
   useEffect(() => {
     socket.emit('username', props.sendName);
@@ -37,13 +38,8 @@ export default function ChatRoom(props: userNameProps) {
 
     // 서버에서 소켓 아이디 받기
     socket.on('info', (socketID: string) => {
-      console.log('socketID', socketID);
-
+      console.log('소켓아이디 socketID:', socketID);
       my_id = socketID;
-
-      console.log('소켓아이디 my_id:', my_id);
-
-      setName(socketID);
     });
 
     // 실시간 디엠 리스트
@@ -66,13 +62,19 @@ export default function ChatRoom(props: userNameProps) {
       // member_list.appendChild(option);
 
       // 접속 인원 디엠 셀렉박스 리스트
-      // console.log(Object.entries(list));
+      console.log('접속 인원', Object.entries(list));
+      console.log('접속 인원', Object.entries(list));
+      let users: Array<string[]> = Object.entries(list);
       // for (let [key, value] of Object.entries(list)) {
       //   const option = document.createElement('option') as HTMLOptionElement;
       //   option.text = value;
       //   option.value = value;
       //   member_list.appendChild(option);
       // }
+
+      // Object.entries(list).map((el) => {
+      //   ({})
+      // })
     });
 
     // 공지 ( 유저 입장 & 퇴장 알림 )
@@ -111,7 +113,6 @@ export default function ChatRoom(props: userNameProps) {
 
   console.log('nicknameList?', nicknameList);
   // console.log('my_id', my_id);
-  console.log(name);
 
   return (
     <>
@@ -145,19 +146,14 @@ export default function ChatRoom(props: userNameProps) {
               <div>
                 <select id="members" defaultValue="전체">
                   <option value="all">전체</option>
-                  {nicknameList && nicknameList.length > 0 && (
-                    <>
-                      {nicknameList.map((person, my_id) => {
-                        return (
-                          <option key={my_id} value={person}>
-                            {person}
-                          </option>
-                        );
-                      })}
-                    </>
-                    // ) : (
-                    //   <div>no user...</div>
-                  )}
+                  {nicknameList &&
+                    Object.entries(nicknameList).map((id, value) => {
+                      return (
+                        <option key={id[0]} value={id[0]}>
+                          {id[1]}
+                        </option>
+                      );
+                    })}
                 </select>
               </div>
               <form className="form">

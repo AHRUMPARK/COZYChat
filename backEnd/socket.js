@@ -9,14 +9,13 @@ var socket = function (server) {
             origin: '*'
         }
     });
+    // 유저 리스트
+    var userList = {};
     // 최초 입장 & 서버 알림
     // 닉네임 받기 => 소켓 아이디와 닉네임 맞춰주기
     // { 소켓 아이디 : "닉네임", 소켓아이디: "닉네임" } 키 벨류로 한명씩 추가
-    // 유저 리스트
-    var userList = {};
     io.on('connect', function (socket) {
         console.log("\uC0C8\uB85C\uC6B4 \uC720\uC800 ".concat(socket.id, " \uC5F0\uACB0"));
-        // 통신하는 고유 소캣 아이디 클라이언트에게 보내기
         console.log('info 보내고 있냐' + socket.id);
         // io.emit('notice', socket.id + '님이 입장하셨습니다.');
         socket.on('username', function (name) {
@@ -24,6 +23,7 @@ var socket = function (server) {
             userList[socket.id] = name;
             console.log('userList=!!!!!!!!:', userList);
             io.emit('list', userList);
+            // 통신하는 고유 소캣 아이디 클라이언트에게 보내기
             socket.emit('info', socket.id);
             io.emit('notice', name + ' 님이 입장하셨습니다.');
         });

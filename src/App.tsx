@@ -3,8 +3,6 @@ import LOGO from '../src/assets/logo.png';
 import backImg from '../src/assets/back_img.jpg';
 import style from './App.module.css';
 import ChatRoom from './components/ChatRoom';
-import TestRoom from './components/TestRoom';
-// import ChattingRoom from './components/ChattingRoom';
 
 export type userNameProps = {
   name: string;
@@ -24,7 +22,7 @@ function App() {
       setStart(false);
       return false;
     } else {
-      const userName = nickNameRef.current!.value;
+      const userName = nickNameRef.current.value;
       console.log(userName);
       setStart(true);
     }

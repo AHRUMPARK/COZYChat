@@ -33,7 +33,6 @@ section {
 }
 
 
-
 .chat_log {
   /* width: 300px; */
   display: block;
@@ -49,7 +48,14 @@ section {
   position: relative;
   }
   
+  .dm {
+    background: #fec3ff;
+  }
   
+  .my-dm {
+    background: #bc00bf;
+  }
+
   .Right:before {
   content: "";
   text-align: right;
@@ -98,7 +104,7 @@ section {
   vertical-align:middle;
 }
 
-.chat_input button {
+.sendBtn {
   position: absolute;
   border: none;
   background-color: #43C2E3;
@@ -119,12 +125,12 @@ section {
 }
 
 .chat-box-body {
-
   height: 500px;
   overflow: auto ;
 }
 
 .form{
   display: flex;
-    justify-content: center;
+  justify-content: center;
 }
+

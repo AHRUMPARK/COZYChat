@@ -1,13 +1,13 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var socket_io_1 = require("socket.io");
 // let interval: number = 3000;
 // cors 설정
 var socket = function (server) {
     var io = new socket_io_1.Server(server, {
         cors: {
-            origin: '*'
-        }
+            origin: '*',
+        },
     });
     // 유저 리스트
     var userList = {};
@@ -33,21 +33,29 @@ var socket = function (server) {
             json['from'] = socket.id;
             // json {msg : ~~~, from : ~~~, to : ~~~}
             json['username'] = userList[socket.id];
+            console.log('언제바뀌나 보자', userList[socket.id]);
             // json {msg : ~~~, from : ~~~, username: ~~~ ,  to : ~~~}
             json['is_dm'] = false; //디엠일때만 true
-            // if (json.to === '전체') io.emit('newMSG', json);
-            //     else {
-            //       const socketID = Object.keys(userList).find(
-            //       (key) => userList[key] == json.to
-            // ); // 객체의 키값만 가져옴 /json.to 보내는 이 닉
-            // 디엠 여부
-            // json['is_dm'] = true;
-            // io.to(socketID).emit('newMSG', json);
-            // // 자기 자신한테도 메세지 보내줘야한다 (디엠시)
-            // socket.emit('newMSG', json);
-            // // 디엠인지 아닌지 스타일 바꾸게 하자
-            // }
-            io.emit('newMSG', json);
+            if (json.to === 'all') {
+                io.emit('newMSG', json);
+                // '전체'가 아닐때, dm 모드 
+                return false;
+            }
+            else {
+                var socketID = Object.keys(userList).find(function (key) { return userList[key] == json.to; }); // 객체의 키값만 가져옴 /json.to 보내는 이 닉 
+                console.log('sssssss=========:', Object.keys(userList).find(function (key) { return userList[key] = json.to; }));
+                // 디엠 여부
+                json['is_dm'] = true;
+                console.log('소켓아이디가 안오는건가? : ', socketID);
+                if (socketID === undefined) {
+                    return false;
+                }
+                else {
+                    io.to(socketID).emit('newMSG', json);
+                    // 자기 자신한테도 메세지 보내줘야한다 (디엠시)
+                    socket.emit('newMSG', json);
+                }
+            }
             console.log('newMSG=============', json);
         });
         // 리스트 객체에서 닉네임 가져오기
@@ -62,4 +70,4 @@ var socket = function (server) {
         });
     });
 };
-exports["default"] = socket;
+exports.default = socket;

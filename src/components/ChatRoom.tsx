@@ -65,14 +65,6 @@ export default function ChatRoom(props: userNameProps) {
     socket.on('list', (list) => {
       console.log('list', list);
       setNickname(list);
-      const online_list = online_members.current;
-      // if(online_list === null) return false
-      // online_list.removeChild<Node>(online_list.firstChild)
-      // const member_list = document.getElementById(
-      //   'members'
-      // ) as HTMLSelectElement;
-      // 첫번째 자식이 있으면, 실행 > 셀렉박스 마지막요소를 지운다
-      // Select box option tag 모두 지우기?
 
       // 접속 인원 디엠 셀렉박스 리스트
       console.log('접속 인원', Object.entries(list));
@@ -90,26 +82,50 @@ export default function ChatRoom(props: userNameProps) {
       div.classList.add('notice');
       // 메세지 넣기 (입장, 퇴장)
       div.textContent = msg;
-      chat_box_body.appendChild(div);
+      const notice = chat_box_body.appendChild(div);
+      notice.classList.add('notice');
     });
 
     // 메세지 받기
     socket.on(
       'newMSG',
-      (json: { username: any; msg: string; from: string; is_dm: boolean }) => {
+      (json: {
+        username: any;
+        msg: string;
+        from: string;
+        is_dm: boolean;
+        times: string;
+      }) => {
         console.log('이거 json값 콘솔 찍힘? ', json);
         const chat_box_body = document.querySelector(
           '.chat-box-body'
         ) as HTMLDivElement;
+
+        const time = document.createElement('div');
+        const nickname = document.createElement('div');
+        const my_div = document.createElement('div');
+        const your_div = document.createElement('div');
         const outer_div = document.createElement('div');
         const div = document.createElement('div');
-        div.textContent = `${json.username}  ${json.msg}`;
+        nickname.textContent = json.username;
+        div.textContent = json.msg;
 
         // 내가 보낸 메세지인지
-        if (my_id === json.from)
-          div.textContent = json.username + ' : ' + json.msg;
+        if (my_id === json.from) nickname.textContent = json.username;
+        div.textContent = json.msg;
+        time.textContent = json.times;
+        // const nick = your_div.appendChild(nickname);
+        // const chat = your_div.appendChild(div);
+        // const totime = your_div.appendChild(time);
+        your_div.appendChild(nickname);
+        your_div.appendChild(div);
+        your_div.appendChild(time);
+        your_div.classList.add('your_div');
+        // chat.classList.add('chat');
+        // totime.classList.add('totime');
+        chat_box_body.appendChild(your_div);
+
         console.log('마이아이디', my_id);
-        chat_box_body.appendChild(div);
 
         // dm 스타일 클래스
         if (my_id === json.from) {
@@ -121,6 +137,7 @@ export default function ChatRoom(props: userNameProps) {
           if (json.is_dm) outer_div.classList.add('dm', 'chat_log', 'Right');
           else outer_div.classList.add('chat_log', 'Left');
         }
+
         outer_div.appendChild(div);
         chat_box_body.appendChild(outer_div);
       }

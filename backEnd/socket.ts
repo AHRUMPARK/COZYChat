@@ -40,6 +40,8 @@ let socket = (server: http.Server) => {
 
     // sendMSG 이벤트 json 형태
     socket.on('sendMSG', (json) => {
+      console.log('-------------------------')
+      console.log(userList)
       let today = new Date();   
       let options:any = {  hour: "numeric", minute: "numeric"}
       let date = today.toLocaleDateString();
@@ -60,15 +62,11 @@ let socket = (server: http.Server) => {
         // '전체'가 아닐때, dm 모드
         //return false;
       } else {
-        let socketID = Object.keys(userList).find((key) => (userList[key] = json.to));
+        let socketID = Object.keys(userList).find((key) => (key===json.to));
         //console.log('test 1 : '+socketID);
         //console.log('check 2 : '+Object.keys(userList).find((key) => (userList[key] = json.to)))
         //let socketID = "sdasdasjdhasdhjk";
         // 객체의 키값만 가져옴 /json.to 보내는 이 닉
-        console.log(
-          '4번 Object.keys=========:',
-          Object.keys(userList).find((key) => (userList[key] = json.to))
-        );
         // 디엠 여부
         json['is_dm'] = true;
         console.log('4번 DM socketID 소켓아이디 : ', socketID);

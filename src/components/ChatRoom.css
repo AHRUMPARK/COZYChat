@@ -136,7 +136,7 @@ section {
   width: 50px;
   height: 50px;
   margin-bottom: 20px;
-  right: 5%;
+  right: 6%;
   cursor: pointer;
 }
 
@@ -146,7 +146,7 @@ section {
 
 .chat-box-body {
   position: relative;
-  height: 500px;
+  height: 750px;
   overflow: auto ;
 }
 
@@ -222,3 +222,30 @@ section {
   left: -16px;
   top: 0px;
   } 
+
+  .d-none {
+    display: none;
+  }
+
+  .d-block {
+    display: block;
+  }
+
+  .emoji_btn {
+    border-radius: 25px;
+    width: 50px;
+    height: 50px;
+    background-color: #9bc3ff;
+    position: absolute;
+    z-index: 1;
+    margin-left: 53%;
+    right: 12%;
+    /* background-image: url(); */
+  }
+
+  .Picker {
+    display: block;
+    position: absolute;
+    margin-left: 40%;
+    padding: 60px;
+  }

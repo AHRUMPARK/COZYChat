@@ -1,41 +1,42 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import ChatNave from './ChatNave';
 import SideNave from './SideNave';
 import userNameProps from '../App';
 
-import socket from '../util/socket';
-import InputEmoji from './InputEmoji.jsx';
-
 import './ChatRoom.css';
+
+import socket from '../util/socket';
+
+//emoji-mart
+import Picker from '@emoji-mart/react';
+import data from '@emoji-mart/data';
 
 interface userNameProps {
   sendName: string;
 }
 
-// interface my_ID {
-//   my_id: string;
-// }
-
 export default function ChatRoom(props: userNameProps) {
-  // const [issocketID, setIsSocketID] = useState<string[]>();
-  const [issocketID, setIsSocketID] = useState<string[] | null>(null);
+  // const [issocketID, setIsSocketID] = useState<string[] | null>(null);
   const [nicknameList, setNickname] = useState<string[]>();
   let chatBodyRef = useRef<HTMLDivElement | null>(null);
-  let emojiRef = useRef<HTMLDivElement | null>(null);
   let online_members = useRef<HTMLSelectElement>(null);
-  const [select, setSelect] = useState<string | null>(null);
+
+  // isEmoji (이모지 창 보여줄지 안보여줄지) //currentEmoji 현재 선택한 이모지
+  const [isEmoji, setIsEmoji] = useState<boolean>(false);
+  const [currentEmoji, setCurrentEmoji] = useState<any>([]);
+  const [input, setInput] = useState<string>('');
+  // const [emojis, setEmojis] = useState<any>();
 
   const btnSend = () => {
     const input = document.getElementById('msgBox') as HTMLInputElement;
-    // dm 용
-    // const to = document.getElementById('members').value;
+
     if (online_members.current) {
       let to: string = online_members.current.value;
       // {to : to }
       socket.emit('sendMSG', { msg: input.value, to });
-      console.log('toooooooooooo', to);
       input.value = '';
+      setCurrentEmoji('');
     }
   };
 
@@ -51,7 +52,16 @@ export default function ChatRoom(props: userNameProps) {
   let userList: string[];
   let my_id: string;
 
-  useEffect(() => {});
+  // const inputChage = useCallback((e: any) => {
+  //   setCurrentEmoji(e.target.value);
+  // }, []);
+
+  useEffect(() => {
+    console.log('currentEmoji', currentEmoji);
+    // currentEmoji.concat('sdsad');
+    // currentEmoji.replace(',');
+  }, [currentEmoji]);
+
   useEffect(() => {
     socket.emit('username', props.sendName);
 
@@ -143,7 +153,6 @@ export default function ChatRoom(props: userNameProps) {
       }
     );
   }, []);
-
   console.log('nicknameList?', nicknameList);
   // console.log('my_id', my_id);
 
@@ -162,16 +171,11 @@ export default function ChatRoom(props: userNameProps) {
 
             <div className="row">
               <div className="chat-box-body" ref={chatBodyRef}>
-                {/* <div className="chat right user">나</div>
-                <div className="chat_log Right">I'm speech bubble</div>
-                <div className="chat right time">오전 12:24</div>
-
-                <div className="chat left user">상대방</div>
+                {/* <div className="chat left user">상대방</div>
                 <div className="chat_log Left">I'm speech bubble</div>
                 <div className="chat left time">오전 12:30</div> */}
               </div>
             </div>
-            {/* <div className="notice"></div> */}
 
             {/* 채팅 입력 구간 */}
             <div className="chat_input">
@@ -190,11 +194,31 @@ export default function ChatRoom(props: userNameProps) {
                 </select>
               </div>
               <form className="form">
-                {/* <D /> */}
-                {/* <InputEmoji /> */}
+                <button
+                  onClick={(e: any) => {
+                    e.preventDefault(); // 기본 동작 막기
+                    setIsEmoji(!isEmoji);
+                  }}
+                  // onClick={onEmojiSelectBtn}
+                  className={isEmoji ? 'd-none' : 'd-block emoji_btn'}
+                >
+                  이모지 선택
+                </button>
+                <div className={isEmoji ? 'd-block Picker' : 'd-none'}>
+                  <Picker
+                    data={data}
+                    previewPosition="none"
+                    onEmojiSelect={(e: any) => {
+                      setInput(input + e.native);
+                      setIsEmoji(!isEmoji);
+                    }}
+                  />
+                </div>
+
                 <input
                   type="text"
                   id="msgBox"
+                  name="msgInput"
                   placeholder="메세지를 입력하세요.."
                   onKeyDown={(e: any) => {
                     if (e.key == 'Enter') {
@@ -202,14 +226,16 @@ export default function ChatRoom(props: userNameProps) {
                       btnSend();
                     }
                   }}
+                  value={input}
+                  onChange={(e) => {
+                    setInput(e.currentTarget.value);
+                  }}
                 />
-
                 <button
                   type="button"
                   className="sendBtn"
                   onClick={btnSend}
                 ></button>
-                <div ref={emojiRef}></div>
               </form>
             </div>
           </div>

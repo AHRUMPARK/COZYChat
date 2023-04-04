@@ -1,13 +1,13 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 var socket_io_1 = require("socket.io");
 // let interval: number = 3000;
 // cors 설정
 var socket = function (server) {
     var io = new socket_io_1.Server(server, {
         cors: {
-            origin: '*',
-        },
+            origin: '*'
+        }
     });
     // 유저 리스트
     var userList = {};
@@ -34,6 +34,8 @@ var socket = function (server) {
         });
         // sendMSG 이벤트 json 형태
         socket.on('sendMSG', function (json) {
+            console.log('-------------------------');
+            console.log(userList);
             var today = new Date();
             var options = { hour: "numeric", minute: "numeric" };
             var date = today.toLocaleDateString();
@@ -53,12 +55,11 @@ var socket = function (server) {
                 //return false;
             }
             else {
-                var socketID = Object.keys(userList).find(function (key) { return (userList[key] = json.to); });
+                var socketID = Object.keys(userList).find(function (key) { return (key === json.to); });
                 //console.log('test 1 : '+socketID);
                 //console.log('check 2 : '+Object.keys(userList).find((key) => (userList[key] = json.to)))
                 //let socketID = "sdasdasjdhasdhjk";
                 // 객체의 키값만 가져옴 /json.to 보내는 이 닉
-                console.log('4번 Object.keys=========:', Object.keys(userList).find(function (key) { return (userList[key] = json.to); }));
                 // 디엠 여부
                 json['is_dm'] = true;
                 console.log('4번 DM socketID 소켓아이디 : ', socketID);
@@ -83,4 +84,4 @@ var socket = function (server) {
         });
     });
 };
-exports.default = socket;
+exports["default"] = socket;

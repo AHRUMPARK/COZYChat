@@ -1,12 +1,12 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-
+import React, { useEffect, useRef, useState } from 'react';
+import socket from '../util/socket';
 import ChatNave from './ChatNave';
 import SideNave from './SideNave';
 import userNameProps from '../App';
 
 import './ChatRoom.css';
 
-import socket from '../util/socket';
+import axios from 'axios';
 
 //emoji-mart
 import Picker from '@emoji-mart/react';
@@ -21,6 +21,8 @@ export default function ChatRoom(props: userNameProps) {
   const [nicknameList, setNickname] = useState<string[]>();
   let chatBodyRef = useRef<HTMLDivElement | null>(null);
   let online_members = useRef<HTMLSelectElement>(null);
+  // let formRef = useRef<HTMLFormElement>(null);
+  let fileRef = useRef<HTMLInputElement>(null);
 
   // isEmoji (이모지 창 보여줄지 안보여줄지) //currentEmoji 현재 선택한 이모지
   const [isEmoji, setIsEmoji] = useState<boolean>(false);
@@ -37,7 +39,75 @@ export default function ChatRoom(props: userNameProps) {
       socket.emit('sendMSG', { msg: input.value, to });
       input.value = '';
       setCurrentEmoji('');
+      setInput('');
     }
+  };
+
+  const onFile = async (e: any) => {
+    const form = document.getElementById('form') as HTMLFormElement;
+    const formData = new FormData();
+
+    const fileData = form.userFile.files;
+    console.log(form.userFile.files);
+
+    for (var i = 0; i < fileData.length; i++) {
+      formData.append('userFile', fileData[i]);
+      console.log('fileData ======: ', formData);
+    }
+    console.log('업데이트 요청');
+
+    await axios
+      .post('http://localhost:3010/userFileUpload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((res) => {
+        if (true) {
+          alert('파일 업로드 성공');
+          console.log('성공');
+          // setInput(input + res.data);
+        } else {
+          alert('실패');
+        }
+      });
+  };
+
+  const onUpload = async (e: any) => {
+    // 1. 보낼 데이터 설정 const data = { 키 : 값}
+    // 2. formData.append('datas', JSON.stringify(datas));
+    // 3. axios post 요청으로 formData 보냄, headers: {'Content-Type': 'multipart/form-data',}
+    fileRef.current?.click();
+    // e.preventDefualt();
+    // const form = document.getElementById('form') as HTMLFormElement;
+    // const formData = new FormData();
+
+    // const fileData = form.userFile.files;
+    // console.log(form.userFile.files);
+
+    // for (var i = 0; i < fileData.length; i++) {
+    //   formData.append('userFile', fileData[i]);
+    //   console.log('fileData ======: ', formData);
+    // }
+    // console.log('업데이트 요청');
+
+    // await axios
+    //   .post('http://localhost:3010/userFileUpload', formData, {
+    //     headers: {
+    //       'Content-Type': 'multipart/form-data',
+    //     },
+    //   })
+    //   .then((res) => {
+    //     if (true) {
+    //       alert('파일 업로드 성공');
+    //       console.log('성공');
+    //       // setInput(input + res.data);
+    //     } else {
+    //       alert('실패');
+    //     }
+    //   });
+    socket.emit('file_upload', data);
+    // await uploadFile(formData);
   };
 
   // const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -51,16 +121,6 @@ export default function ChatRoom(props: userNameProps) {
 
   let userList: string[];
   let my_id: string;
-
-  // const inputChage = useCallback((e: any) => {
-  //   setCurrentEmoji(e.target.value);
-  // }, []);
-
-  useEffect(() => {
-    console.log('currentEmoji', currentEmoji);
-    // currentEmoji.concat('sdsad');
-    // currentEmoji.replace(',');
-  }, [currentEmoji]);
 
   useEffect(() => {
     socket.emit('username', props.sendName);
@@ -193,7 +253,7 @@ export default function ChatRoom(props: userNameProps) {
                     })}
                 </select>
               </div>
-              <form className="form">
+              <form id="form" encType="multipart/form-data">
                 <button
                   onClick={(e: any) => {
                     e.preventDefault(); // 기본 동작 막기
@@ -204,6 +264,7 @@ export default function ChatRoom(props: userNameProps) {
                 >
                   이모지 선택
                 </button>
+
                 <div className={isEmoji ? 'd-block Picker' : 'd-none'}>
                   <Picker
                     data={data}
@@ -236,6 +297,23 @@ export default function ChatRoom(props: userNameProps) {
                   className="sendBtn"
                   onClick={btnSend}
                 ></button>
+
+                {/* 업로드 */}
+                <input
+                  type="file"
+                  name="userFile"
+                  className="d-none"
+                  ref={fileRef}
+                  onChange={onFile}
+                  multiple
+                />
+                <button
+                  type="button"
+                  onClick={onUpload}
+                  style={{ margin: '45px' }}
+                >
+                  업로드
+                </button>
               </form>
             </div>
           </div>

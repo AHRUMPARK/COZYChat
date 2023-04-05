@@ -1,8 +1,12 @@
 import * as http from 'http';
 import { Server } from 'socket.io';
-import { json } from 'express';
+// import express from 'express';
+// import * as multer from "multer" 
 
-// let interval: number = 3000;
+
+// const path = require('path');
+
+
 
 // cors 설정
 let socket = (server: http.Server) => {
@@ -11,6 +15,33 @@ let socket = (server: http.Server) => {
       origin: '*',
     },
   });
+
+// // multer
+// const upload = multer({
+//   storage: multer.diskStorage({
+//     destination: function (req:any, file:any, cb:any) {
+//       // 파일 저장경로 uploads
+//       cb(null, '../public/uploads')
+//     },
+//     filename: function (req:any, file:any, cb:any) {
+//       // 파일 저장 이름
+//       // const ext = path.extname(file.originalname);
+//       // const origin = file.originalname.substring(
+//       //   0, file.originalname.lastIndexOf('.')
+//       // )
+//       cb(null, file.fieldname + '-' + Date.now())
+//     }
+//   })
+// })
+
+// router.post('/userFileUpload', upload.array('userFile'), async (req:any, res:any) => {
+//   // const datas = JSON.parse(req.body.datas);
+//   const datas = JSON.parse(req.body.formData);
+//   console.log('req.files : ', req.files);
+//   console.log('req.body : ', req.body);
+
+//   res.send(true)
+// })
 
   // 유저 리스트
   let userList: any = {};
@@ -63,10 +94,7 @@ let socket = (server: http.Server) => {
         //return false;
       } else {
         let socketID = Object.keys(userList).find((key) => (key===json.to));
-        //console.log('test 1 : '+socketID);
-        //console.log('check 2 : '+Object.keys(userList).find((key) => (userList[key] = json.to)))
-        //let socketID = "sdasdasjdhasdhjk";
-        // 객체의 키값만 가져옴 /json.to 보내는 이 닉
+
         // 디엠 여부
         json['is_dm'] = true;
         console.log('4번 DM socketID 소켓아이디 : ', socketID);
@@ -77,7 +105,7 @@ let socket = (server: http.Server) => {
         // 디엠인지 아닌지 스타일 바꾸게 하자
       }
       console.log('5번 newMSG=============', json);
-      console.log('6번 userList=!!!!!!!!:', userList);
+
     });
  
     // 리스트 객체에서 닉네임 가져오기
@@ -94,4 +122,6 @@ let socket = (server: http.Server) => {
   });
 };
 
+
+// module.exports = router
 export default socket;

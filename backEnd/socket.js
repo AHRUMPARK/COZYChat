@@ -1,14 +1,40 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var socket_io_1 = require("socket.io");
-// let interval: number = 3000;
+// import express from 'express';
+// import * as multer from "multer" 
+// const path = require('path');
 // cors 설정
 var socket = function (server) {
     var io = new socket_io_1.Server(server, {
         cors: {
-            origin: '*'
-        }
+            origin: '*',
+        },
     });
+    // // multer
+    // const upload = multer({
+    //   storage: multer.diskStorage({
+    //     destination: function (req:any, file:any, cb:any) {
+    //       // 파일 저장경로 uploads
+    //       cb(null, '../public/uploads')
+    //     },
+    //     filename: function (req:any, file:any, cb:any) {
+    //       // 파일 저장 이름
+    //       // const ext = path.extname(file.originalname);
+    //       // const origin = file.originalname.substring(
+    //       //   0, file.originalname.lastIndexOf('.')
+    //       // )
+    //       cb(null, file.fieldname + '-' + Date.now())
+    //     }
+    //   })
+    // })
+    // router.post('/userFileUpload', upload.array('userFile'), async (req:any, res:any) => {
+    //   // const datas = JSON.parse(req.body.datas);
+    //   const datas = JSON.parse(req.body.formData);
+    //   console.log('req.files : ', req.files);
+    //   console.log('req.body : ', req.body);
+    //   res.send(true)
+    // })
     // 유저 리스트
     var userList = {};
     // 최초 입장 & 서버 알림
@@ -56,10 +82,6 @@ var socket = function (server) {
             }
             else {
                 var socketID = Object.keys(userList).find(function (key) { return (key === json.to); });
-                //console.log('test 1 : '+socketID);
-                //console.log('check 2 : '+Object.keys(userList).find((key) => (userList[key] = json.to)))
-                //let socketID = "sdasdasjdhasdhjk";
-                // 객체의 키값만 가져옴 /json.to 보내는 이 닉
                 // 디엠 여부
                 json['is_dm'] = true;
                 console.log('4번 DM socketID 소켓아이디 : ', socketID);
@@ -70,7 +92,6 @@ var socket = function (server) {
                 // 디엠인지 아닌지 스타일 바꾸게 하자
             }
             console.log('5번 newMSG=============', json);
-            console.log('6번 userList=!!!!!!!!:', userList);
         });
         // 리스트 객체에서 닉네임 가져오기
         socket.on('disconnect', function () {
@@ -84,4 +105,5 @@ var socket = function (server) {
         });
     });
 };
-exports["default"] = socket;
+// module.exports = router
+exports.default = socket;

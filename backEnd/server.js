@@ -35,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 // import express from 'express';
 var http = require("http");
 var path = require("path");
@@ -46,16 +46,12 @@ var express = require('express');
 // localhost 포트 설정
 var PORT = 3010;
 var app = express();
+// 미들웨어 cors 어떤 주소로 요청해도 에러가 뜨지 않도록
+var cors = require('cors');
+app.use(cors());
 app.use(express.static(path.join(__dirname, 'public'))); // 요청시 기본 경로 설정
 app.use(express.json()); // json 파싱, 유저가 보낸 데이터 출력하기 위해 필요
 app.use(express.urlencoded({ extended: true })); // uri 파싱
-// upload 할 폴더 없을 시 생성
-// try {
-//     fs.readdirSync('..public/uploads');
-//   } catch (err) {
-//     console.error('upload할 upload 폴더가 없습니다. 폴더를 생성합니다.');
-//     fs.mkdirSync('../public/uploads');
-//   }
 // multer
 var upload = multer({
     storage: multer.diskStorage({
@@ -65,6 +61,7 @@ var upload = multer({
         },
         filename: function (req, file, done) {
             //파일 저장 이름
+            file.originalname = Buffer.from(file.originalname, 'latin1').toString('utf-8');
             var ext = path.extname(file.originalname);
             var origin = file.originalname.substring(0, file.originalname.lastIndexOf('.'));
             done(null, "".concat(origin, "-").concat(Date.now(), "-").concat(ext)); //저장 파일 명
@@ -72,19 +69,14 @@ var upload = multer({
     })
 });
 app.post('/userFileUpload', upload.array('userFile'), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var datas;
     return __generator(this, function (_a) {
-        if (req.body.formData === undefined || req.files === undefined) 
-        // if ( req.files === undefined )
-        {
+        if (req.files === undefined) {
             console.log('파일이 없습니다.');
-            console.log('req.files?? : ', req.files);
+            res.send(false);
         }
         else {
-            datas = JSON.parse(req.body.formData);
             console.log('req.files : ', req.files);
-            console.log('req.body : ', req.body);
-            res.send(true);
+            res.send(req.files);
         }
         return [2 /*return*/];
     });
@@ -92,6 +84,6 @@ app.post('/userFileUpload', upload.array('userFile'), function (req, res) { retu
 // server instance
 var server = http.createServer(app);
 // socketio 생성 후 서버 인스텐스 사용
-(0, socket_1.default)(server);
+(0, socket_1["default"])(server);
 server.listen(PORT, function () { return console.log("Server port ".concat(PORT, " OPEN!")); });
 module.exports = app;

@@ -23,7 +23,7 @@
   top: 50%;
   transform: translate(33vw, -50%);
 
-  padding: 20px 0px;
+  padding: 30px 0px;
   margin: 0 auto;
   width: 35vw;
   background-color: rgba(255, 255, 255, 0.7);
@@ -44,7 +44,7 @@
 }
 
 .margin input {
-  width: 20vw;
+  width: 18vw;
   height: 40px;
   background-color: rgba(255, 255, 255, 0);
   border: none;
@@ -67,17 +67,17 @@
 }
 
 .margin button {
-color: #565656;
-font-size: 14px;
-font-weight: 550;
-width: 13vw;
-height: 45px;
-background-color: #B7E1F3;
-  border: none;
-  border-radius: 35px;
-  box-shadow: 3px 3px 6px rgba(63, 80, 97, 0.1);
-  cursor: pointer;
-  outline: none;
+    color: #565656;
+    font-size: 14px;
+    font-weight: 550;
+    width: 12vw;
+    height: 50px;
+    background-color: #B7E1F3;
+    border: none;
+    border-radius: 35px;
+    box-shadow: 3px 3px 6px rgba(63, 80, 97, 0.1);
+    cursor: pointer;
+    outline: none;
 }
 
 .margin button:hover {
@@ -88,13 +88,38 @@ background-color: #B7E1F3;
 
 .margin img {
   width: 150px;
-  width: 27vw;
+  width: 25vw;
   margin: -10px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+* {
+  font-family: "Pretendard-Regular";
 }
 
+@font-face {
+    font-family: 'EarlyFontDiary';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_220508@1.0/EarlyFontDiary.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Cafe24SsurroundAir';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24SsurroundAir.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'yg-jalnan';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.2/JalnanOTF00.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}

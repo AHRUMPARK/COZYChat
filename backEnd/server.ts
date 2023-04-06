@@ -3,6 +3,7 @@ import * as http from 'http';
 import * as path from 'path';
 import socket from './socket';
 
+
 const fs = require('fs');
 const multer = require('multer');
 const express = require('express');
@@ -11,18 +12,15 @@ const express = require('express');
 const PORT = 3010;
 const app = express();
 
+// 미들웨어 cors 어떤 주소로 요청해도 에러가 뜨지 않도록
+const cors = require('cors');
+app.use(cors());
 
 app.use(express.static(path.join(__dirname, 'public'))); // 요청시 기본 경로 설정
 app.use(express.json()); // json 파싱, 유저가 보낸 데이터 출력하기 위해 필요
 app.use(express.urlencoded({ extended: true })); // uri 파싱
 
-// upload 할 폴더 없을 시 생성
-// try {
-//     fs.readdirSync('..public/uploads');
-//   } catch (err) {
-//     console.error('upload할 upload 폴더가 없습니다. 폴더를 생성합니다.');
-//     fs.mkdirSync('../public/uploads');
-//   }
+
 
 // multer
 const upload = multer({
@@ -33,6 +31,7 @@ const upload = multer({
       },
       filename: function (req:any, file:any, done:any) {
         //파일 저장 이름
+        file.originalname = Buffer.from(file.originalname, 'latin1').toString('utf-8');
         const ext = path.extname(file.originalname);
         const origin = file.originalname.substring(
           0, file.originalname.lastIndexOf('.')
@@ -43,16 +42,13 @@ const upload = multer({
   })
   
   app.post('/userFileUpload', upload.array('userFile'), async (req:any, res:any) => {
-    if ( req.body.formData === undefined || req.files === undefined )
-    // if ( req.files === undefined )
+    if ( req.files === undefined )
      {
         console.log('파일이 없습니다.')
-        console.log('req.files?? : ', req.files);
+        res.send(false)
     } else {
-        const datas = JSON.parse(req.body.formData);
         console.log('req.files : ', req.files);
-        console.log('req.body : ', req.body);
-        res.send(true)
+        res.send(req.files)
     }
   })
 

@@ -170,8 +170,8 @@ export default function ChatRoom(props: userNameProps) {
           // 내가 보내는 디엠
           if (json.is_dm) {
             outer_div.classList.add('my-dm', 'chat_log', 'Right');
-            content_div_name.classList.add('nick'); // 내가 보낸 디엠
-            content_div_time.classList.add('time'); // 내가 보낸 디엠
+            content_div_name.classList.add('nick', 'my-dm-right'); // 내가 보낸 디엠
+            content_div_time.classList.add('time', 'my-dm-right'); // 내가 보낸 디엠
           } else {
             outer_div.classList.add('chat_log', 'Right');
             content_div_name.classList.add('nick', 'Right'); // 내가 보낸 전체챗
@@ -181,15 +181,14 @@ export default function ChatRoom(props: userNameProps) {
           // 다른사람이 보낸 디엠
           if (json.is_dm) {
             outer_div.classList.add('dm', 'chat_log', 'Right');
-            content_div_name.classList.add('nick'); // 누가 보낸 디엠
-            content_div_time.classList.add('time'); // 누가 보낸 디엠
+            content_div_name.classList.add('nick', 'dm-left'); // 누가 보낸 디엠
+            content_div_time.classList.add('time', 'dm-left'); // 누가 보낸 디엠
           } else {
             outer_div.classList.add('chat_log', 'Left');
             content_div_name.classList.add('nick'); // 누가 보낸 전체챗
             content_div_time.classList.add('time'); // 누가 보낸 전체챗
           }
         }
-
         content_div_name.appendChild(nickname);
         outer_div.appendChild(div);
         content_div_time.appendChild(time);
@@ -200,7 +199,6 @@ export default function ChatRoom(props: userNameProps) {
     );
   }, []);
   console.log('nicknameList?', nicknameList);
-  // console.log('my_id', my_id);
 
   return (
     <>

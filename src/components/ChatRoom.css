@@ -35,16 +35,14 @@ section {
 .chat_log {
   display: inline-block;
   border-radius: 15px;
-  background: #00bfb6;
-  color: #fff;
+  background: #9bffe4;
   padding: 2%;
-  /* text-align: center; */
+  color:#00485a;
   font-weight: 900;
   font-family: arial;
   border: none;
-  border-bottom: 3px solid rgb(177, 177, 255);
+  border-bottom: 4px solid rgb(177, 177, 255);
   border-radius: 10px;
-  /* position: relative; */
   white-space: pre-line;
   word-break: break-all;
 }
@@ -57,8 +55,8 @@ section {
 }
 
 .Left {
-  background: #9bc3ff;
-  color: #fff;
+  background: #ffffff;
+  color:#00485a;
   margin-right: auto;
 }
 
@@ -112,6 +110,7 @@ section {
   height: 50px;
   border: none;
   border-radius: 15px;
+  padding-left: 10px;
 }
 
 .chat_input input::placeholder {
@@ -144,7 +143,7 @@ section {
   display: flex;
   flex-direction: column;
   position: relative;
-  height: 750px;
+  height: 68vh;
   overflow: auto;
 }
 
@@ -160,34 +159,33 @@ section {
 .nick {
   margin-right: 10px;
   margin-bottom: 5px;
-  font-size: 16px;
-  font-weight: 600;
-  color: rebeccapurple;
+  font-size: 15px;
+  font-weight: 500;
+  color: rgb(85, 115, 143);
 }
 
 .time {
-  margin-right: 10px;
+  margin-right: 12px;
   margin-top: 5px;
-  font-size: smaller;
-  color: rebeccapurple;
-}
-
-.incoming {
-  /* position: absolute; */
-  width: 50%;
-  height: 100%;
-  padding: 20px;
-  background: lighten(dark, 23%);
+  color: rgb(97, 141, 182);
+  font-size: 12px;
 }
 
 .dm {
-  background: #fec3ff;
+  background: #ffe7ff;
 }
 
 .my-dm {
-  background: #71d7ff;
+  background: #ffc79f;
 }
 
+.my-dm-right {
+  margin-right: auto;
+}
+
+.dm-left {
+  margin-left: auto;
+}
 /* .my-dm:before {
   content: '';
   text-align: right;
@@ -230,6 +228,7 @@ section {
   height: 30px;
   background-color: transparent;
   background-image: url('../assets/c.png');
+  opacity: 0.4;
   background-size: 25px;
   background-position: center;
   background-repeat: no-repeat;
@@ -244,8 +243,7 @@ section {
 .Picker {
   display: block;
   position: absolute;
-  margin-left: 40%;
-  padding: 60px;
+  margin: -445px 0px 0px 325px
 }
 
 .img img {
@@ -257,6 +255,7 @@ section {
   border: none;
   background-color: transparent;
   background-image: url('../assets/d.png');
+  opacity: 0.5;
   background-size: 25px;
   background-position: center;
   background-repeat: no-repeat;

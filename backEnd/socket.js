@@ -9,12 +9,6 @@ var socket = function (server) {
             methods: ['GET', 'POST']
         }
     });
-    // let socket = socketIo(server, {
-    //   cors: {
-    //       origin: 'http://localhost:3000',
-    //       methods: ["GET","POST"]
-    //   }
-    // });
     // 유저 리스트
     var userList = {};
     // 최초 입장 & 서버 알림
@@ -36,6 +30,14 @@ var socket = function (server) {
             io.emit('notice', date + ' ' + ' ' + time);
             io.emit('notice', name + ' 님이 입장하셨습니다.');
         });
+        socket.on('allNotice', function (noticeMSG) {
+            console.log('공지 오니? : ', noticeMSG);
+            // let today = new Date();
+            // let options: any = { hour: 'numeric', minute: 'numeric' };
+            // let date = today.toLocaleDateString();
+            // let time = today.toLocaleTimeString('ko-KR', options);
+            io.emit('alretNotice', noticeMSG);
+        });
         // sendMSG 이벤트 json 형태
         socket.on('sendMSG', function (json) {
             // json['is_file']
@@ -50,7 +52,6 @@ var socket = function (server) {
             // json {msg : ~~~, from : ~~~, to : ~~~}
             json['username'] = userList[socket.id];
             console.log('2번 언제바뀌나 보자 username', userList[socket.id]);
-            // json {msg : ~~~, from : ~~~, username: ~~~ ,  to : ~~~}
             json['is_dm'] = false; //디엠일때만 true
             json['today'] = date;
             json['times'] = time;
@@ -61,7 +62,6 @@ var socket = function (server) {
                 var socketID = Object.keys(userList).find(function (key) { return key === json.to; });
                 json['is_dm'] = true;
                 console.log('4번 DM socketID 소켓아이디 : ', socketID);
-                // if (socketID !== undefined)
                 io.to(socketID).emit('newMSG', json);
                 // 자기 자신한테도 메세지 보내줘야한다 (디엠시)
                 socket.emit('newMSG', json);

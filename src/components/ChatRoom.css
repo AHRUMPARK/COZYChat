@@ -35,9 +35,9 @@ section {
 .chat_log {
   display: inline-block;
   border-radius: 15px;
-  background: #9bffe4;
+  background: #bdffed;
   padding: 2%;
-  color:#00485a;
+  color: #00485a;
   font-weight: 900;
   font-family: arial;
   border: none;
@@ -56,7 +56,7 @@ section {
 
 .Left {
   background: #ffffff;
-  color:#00485a;
+  color: #00485a;
   margin-right: auto;
 }
 
@@ -140,6 +140,7 @@ section {
 }
 
 .chat-box-body {
+  padding: 0px 150px;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -180,12 +181,15 @@ section {
 }
 
 .my-dm-right {
-  margin-right: auto;
+  display: flex;
+  margin-left: auto;
 }
 
 .dm-left {
-  margin-left: auto;
+  /* display: flex;
+  margin-right: auto; */
 }
+
 /* .my-dm:before {
   content: '';
   text-align: right;
@@ -243,11 +247,11 @@ section {
 .Picker {
   display: block;
   position: absolute;
-  margin: -445px 0px 0px 325px
+  margin: -445px 0px 0px 325px;
 }
 
 .img img {
-  height: 200px;
+  width: 400px;
 }
 
 .upload_botton {
@@ -274,4 +278,21 @@ section {
 
 .chat_input p {
   margin: 5px;
+}
+
+.notice_botton {
+  position: absolute;
+  border: none;
+  background-color: transparent;
+  background-image: url('../assets/a.png');
+  opacity: 0.5;
+  background-size: 25px;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 15px;
+  width: 30px;
+  height: 35px;
+  right: 18%;
+  cursor: pointer;
+  margin: 10px 0px;
 }

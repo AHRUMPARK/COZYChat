@@ -1,28 +1,28 @@
 .chatNave_container {
-    padding: 10px 0px;
-    background-color: rgb(255, 255, 255);
-    width: 100vw;
+  padding: 10px 0px;
+  background-color: rgb(255, 255, 255);
+  width: 100vw;
 }
 
 .chatNave {
-    margin: 0 20px;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
+  margin: 0 20px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
 .chatNave button {
-    border: none;
-    background-color: #EA7575;
-    background-image: url('/src/assets/exit.png');
-    background-size: 25px; 
-    background-position: center;
-    background-repeat: no-repeat;
-    border-radius: 25px;
-    width: 50px;
-    height: 50px;
+  border: none;
+  background-color: #ea7575;
+  background-image: url('/src/assets/exit.png');
+  background-size: 25px;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 25px;
+  width: 50px;
+  height: 50px;
 }
 
 .form {
-    display: flex;
+  display: flex;
 }

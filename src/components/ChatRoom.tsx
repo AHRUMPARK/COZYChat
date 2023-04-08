@@ -1,4 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { add } from '../store/Notice';
 import socket from '../util/socket';
 import ChatNave from './ChatNave';
 import SideNave from './SideNave';
@@ -21,11 +23,9 @@ export default function ChatRoom(props: userNameProps) {
   const [nicknameList, setNickname] = useState<string[]>();
   let chatBodyRef = useRef<HTMLDivElement | null>(null);
   let online_members = useRef<HTMLSelectElement>(null);
-  // let formRef = useRef<HTMLFormElement>(null);
   let fileRef = useRef<HTMLInputElement>(null);
 
   // isEmoji (이모지 창 보여줄지 안보여줄지) //currentEmoji 현재 선택한 이모지
-
   const [isEmoji, setIsEmoji] = useState<boolean>(false);
   const [currentEmoji, setCurrentEmoji] = useState<any>([]);
   const [input, setInput] = useState<string>('');
@@ -44,10 +44,28 @@ export default function ChatRoom(props: userNameProps) {
       setInput('');
     }
   };
+  const dispatch = useDispatch();
+
+  // 공지
+  const onNotice = useCallback(() => {
+    const input = document.getElementById('msgBox') as HTMLInputElement;
+    let today = new Date();
+    let options: any = { hour: 'numeric', minute: 'numeric' };
+    let date = today.toLocaleDateString();
+    let time = today.toLocaleTimeString('ko-KR', options);
+
+    const alert = {
+      content: input.value,
+      date: date,
+      time: time,
+    };
+    socket.emit('allNotice', alert);
+
+    input.value = '';
+  }, []);
 
   const onFile = async (e: any) => {
     const form = document.getElementById('form') as HTMLFormElement;
-
     const formData = new FormData();
 
     const fileData = form.userFile.files;
@@ -55,7 +73,6 @@ export default function ChatRoom(props: userNameProps) {
       formData.append('userFile', fileData[i]);
     }
     console.log('업데이트 요청');
-
     await axios
       .post('http://localhost:3010/userFileUpload', formData, {
         headers: {
@@ -180,7 +197,7 @@ export default function ChatRoom(props: userNameProps) {
         } else {
           // 다른사람이 보낸 디엠
           if (json.is_dm) {
-            outer_div.classList.add('dm', 'chat_log', 'Right');
+            outer_div.classList.add('dm', 'chat_log', 'Left');
             content_div_name.classList.add('nick', 'dm-left'); // 누가 보낸 디엠
             content_div_time.classList.add('time', 'dm-left'); // 누가 보낸 디엠
           } else {
@@ -197,6 +214,10 @@ export default function ChatRoom(props: userNameProps) {
         chat_box_body.appendChild(content_div_time);
       }
     );
+
+    socket.on('alretNotice', (alert) => {
+      dispatch(add(alert));
+    });
   }, []);
   console.log('nicknameList?', nicknameList);
 
@@ -214,18 +235,13 @@ export default function ChatRoom(props: userNameProps) {
             {/* 채팅 로그 구간 */}
 
             <div className="row">
-              <div className="chat-box-body" ref={chatBodyRef}>
-                {/* <div className="chat left user">상대방</div>
-                <div className="chat_log Left">I'm speech bubble</div>
-                <div className="chat left time">오전 12:30</div> */}
-              </div>
+              <div className="chat-box-body" ref={chatBodyRef}></div>
             </div>
 
             {/* 채팅 입력 구간 */}
             <div className="chat_input">
               <div>
                 {/* DM셀렉트 박스 */}
-                {/* <p>보낼 사람 </p>/ */}
                 <select id="members" defaultValue="전체" ref={online_members}>
                   <option value="all">전체</option>
                   {nicknameList &&
@@ -240,11 +256,15 @@ export default function ChatRoom(props: userNameProps) {
               </div>
               <form id="form" encType="multipart/form-data" className="form">
                 <button
+                  type="button"
+                  className="notice_botton"
+                  onClick={onNotice}
+                ></button>
+                <button
                   onClick={(e: any) => {
                     e.preventDefault(); // 기본 동작 막기
                     setIsEmoji(!isEmoji);
                   }}
-                  // onClick={onEmojiSelectBtn}
                   className={isEmoji ? 'd-none' : 'd-block emoji_btn'}
                 ></button>
                 <div className={isEmoji ? 'd-block Picker' : 'd-none'}>
@@ -257,6 +277,7 @@ export default function ChatRoom(props: userNameProps) {
                     }}
                   />
                 </div>
+
                 <input
                   type="text"
                   id="msgBox"
@@ -273,15 +294,14 @@ export default function ChatRoom(props: userNameProps) {
                     setInput(e.currentTarget.value);
                   }}
                 />
+
                 <button
                   type="button"
                   className="sendBtn"
                   onClick={btnSend}
                 ></button>
+
                 {/* 업로드 */}
-                {/* <img src="/uploads/2.png" alt="테스트2" />; */}
-                {/* <div className={isImg ? 'd-block Img_div' : 'd-none'}> */}
-                {/* </div> */}
                 <input
                   type="file"
                   name="userFile"

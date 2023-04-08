@@ -6,19 +6,17 @@ import ChatRoom from './components/ChatRoom';
 
 export type userNameProps = {
   name: string;
-  // name: nickNameRef.current!.value;
 };
 
 function App() {
+  const [notice, setNotice] = useState<string | null>(null);
   // 상태가 null일 수도 있고, 아닐 수도 있다.
-  // type username = { name: string;};
   const [start, setStart] = useState<null | boolean>(null);
   const nickNameRef = useRef<HTMLInputElement>(null);
 
   const onStartChat = () => {
     if (nickNameRef.current === null) {
       alert('닉네임을 입력해 주세요.');
-      // nickNameRef.current.focus();
       setStart(false);
       return false;
     } else {
@@ -32,7 +30,6 @@ function App() {
       {start === true ? (
         <ChatRoom sendName={nickNameRef.current!.value} />
       ) : (
-        // <ChattingRoom />
         <div className={style.main_container}>
           <img className={style.backImg} src={backImg} alt="백이미지" />
           <div className={style.info_container}>

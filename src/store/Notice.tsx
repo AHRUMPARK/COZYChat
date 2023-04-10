@@ -1,7 +1,3 @@
-// interface types {
-//   notice: string[];
-// }
-
 interface Alert {
   content: string;
   date: string;
@@ -10,10 +6,6 @@ interface Alert {
 const initalState: Alert[] = [];
 // 액션 타입
 export const ADD = 'ADD';
-// interface set_notice {
-//   type: string;
-// }
-// const SETNOTICE: set_notice = type: 'ADD'
 
 // 액션 함수 생성
 // payload에는 공지 메세지 받아오고싶다.

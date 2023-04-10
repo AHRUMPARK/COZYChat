@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { add } from '../store/Notice';
 import socket from '../util/socket';
 import ChatNave from './ChatNave';
@@ -30,7 +30,8 @@ export default function ChatRoom(props: userNameProps) {
   const [currentEmoji, setCurrentEmoji] = useState<any>([]);
   const [input, setInput] = useState<string>('');
 
-  const [isImg, setIsImg] = useState<boolean>(false);
+  // 토글 버튼
+  const [isCheck, setIsCheck] = useState<boolean>(false);
 
   const btnSend = () => {
     const input = document.getElementById('msgBox') as HTMLInputElement;
@@ -133,6 +134,7 @@ export default function ChatRoom(props: userNameProps) {
       div.textContent = msg;
       const notice = chat_box_body.appendChild(div);
       notice.classList.add('notice');
+      // notice.scrollIntoView({ behavior: 'smooth' });
     });
 
     // 메세지 받기
@@ -146,6 +148,7 @@ export default function ChatRoom(props: userNameProps) {
         is_dm: boolean;
         times: string;
         file: any;
+        to: string;
       }) => {
         console.log('json값 ', json);
         const chat_box_body = document.querySelector(
@@ -169,30 +172,31 @@ export default function ChatRoom(props: userNameProps) {
 
         nickname.textContent = json.username;
         div.textContent = json.msg;
-
+        if (json.from === json.to) {
+          alert('나에게 DM을 보낼 수 없습니다.');
+          return false;
+        }
         // 내가 보낸 메세지인지
         if (my_id === json.from) nickname.textContent = json.username;
         div.textContent = json.msg;
         time.textContent = json.times;
 
         div.appendChild(file_div);
-        // div.classList.add('your_div');
-
         chat_box_body.appendChild(div);
-
         console.log('마이아이디', my_id);
 
         // dm 스타일 클래스
+
         if (my_id === json.from) {
           // 내가 보내는 디엠
           if (json.is_dm) {
-            outer_div.classList.add('my-dm', 'chat_log', 'Right');
-            content_div_name.classList.add('nick', 'my-dm-right'); // 내가 보낸 디엠
-            content_div_time.classList.add('time', 'my-dm-right'); // 내가 보낸 디엠
+            outer_div.classList.add('my-dm', 'chat_log', 'Right'); // 내가 보낸 디엠
+            content_div_name.classList.add('nick', 'my-dm-right');
+            content_div_time.classList.add('time', 'my-dm-right');
           } else {
-            outer_div.classList.add('chat_log', 'Right');
-            content_div_name.classList.add('nick', 'Right'); // 내가 보낸 전체챗
-            content_div_time.classList.add('time', 'Right'); // 내가 보낸 전체챗
+            outer_div.classList.add('chat_log', 'Right'); // 내가 보낸 전체챗
+            content_div_name.classList.add('nick', 'Right');
+            content_div_time.classList.add('time', 'Right');
           }
         } else {
           // 다른사람이 보낸 디엠
@@ -212,6 +216,8 @@ export default function ChatRoom(props: userNameProps) {
         chat_box_body.appendChild(content_div_name);
         chat_box_body.appendChild(outer_div);
         chat_box_body.appendChild(content_div_time);
+        content_div_time.scrollIntoView({ behavior: 'smooth' });
+        // time.scrollIntoView({ behavior: 'smooth' });
       }
     );
 
@@ -227,13 +233,9 @@ export default function ChatRoom(props: userNameProps) {
         <ChatNave />
         <div className="chatRoom_page">
           <SideNave />
-
+          {/* 채팅 공간 */}
           <div className="chatRoom_container">
-            {/* 공지구간 */}
-            <div></div>
-
             {/* 채팅 로그 구간 */}
-
             <div className="row">
               <div className="chat-box-body" ref={chatBodyRef}></div>
             </div>
@@ -257,7 +259,7 @@ export default function ChatRoom(props: userNameProps) {
               <form id="form" encType="multipart/form-data" className="form">
                 <button
                   type="button"
-                  className="notice_botton"
+                  className="notice_botton sub_btn"
                   onClick={onNotice}
                 ></button>
                 <button
@@ -265,7 +267,7 @@ export default function ChatRoom(props: userNameProps) {
                     e.preventDefault(); // 기본 동작 막기
                     setIsEmoji(!isEmoji);
                   }}
-                  className={isEmoji ? 'd-none' : 'd-block emoji_btn'}
+                  className={isEmoji ? 'd-none' : 'd-block emoji_btn sub_btn'}
                 ></button>
                 <div className={isEmoji ? 'd-block Picker' : 'd-none'}>
                   <Picker
@@ -316,8 +318,49 @@ export default function ChatRoom(props: userNameProps) {
                     e.preventDefault();
                     onUpload();
                   }}
-                  className="upload_botton"
+                  className="upload_botton sub_btn"
                 ></button>
+                {/* 버튼 토글 */}
+                <button
+                  className="toggle"
+                  type="button"
+                  onClick={() => {
+                    setIsCheck((e) => !e);
+                  }}
+                >
+                  {isCheck ? '-' : '+'}
+                </button>
+                {isCheck && (
+                  <div className="toggleDiv">
+                    <div>
+                      <button
+                        type="button"
+                        className="noticeBtn"
+                        onClick={onNotice}
+                      ></button>
+                    </div>
+                    <div>
+                      <button
+                        onClick={(e: any) => {
+                          e.preventDefault(); // 기본 동작 막기
+                          setIsEmoji(!isEmoji);
+                        }}
+                        className={isEmoji ? 'd-none' : 'd-block emojiBtn'}
+                      ></button>
+                    </div>
+                    <div>
+                      {' '}
+                      <button
+                        type="button"
+                        onClick={(e: any) => {
+                          e.preventDefault();
+                          onUpload();
+                        }}
+                        className="uploadBtn"
+                      ></button>
+                    </div>
+                  </div>
+                )}
               </form>
             </div>
           </div>

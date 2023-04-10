@@ -21,6 +21,7 @@ section {
   padding: 30px;
 }
 
+/* chatNave */
 .chatNave {
   margin: 0 40px;
   display: flex;
@@ -28,20 +29,23 @@ section {
   align-items: center;
 }
 
+/* 왼쪽 상단 로고 이미지 */
 .chatNave img {
-  width: 250px;
+  width: 200px;
 }
 
+/* 채팅 로그 */
 .chat_log {
+  max-width: 350px;
   display: inline-block;
   border-radius: 15px;
-  background: #bdffed;
+  background: #fff0a4;
   padding: 2%;
   color: #00485a;
-  font-weight: 900;
-  font-family: arial;
+  font-size: 15px;
+  font-weight: 550;
   border: none;
-  border-bottom: 4px solid rgb(177, 177, 255);
+  border-bottom: 4px solid rgb(177, 212, 255);
   border-radius: 10px;
   white-space: pre-line;
   word-break: break-all;
@@ -58,6 +62,41 @@ section {
   background: #ffffff;
   color: #00485a;
   margin-right: auto;
+}
+
+.nick {
+  margin-right: 10px;
+  margin-bottom: 5px;
+  font-size: 15px;
+  font-weight: 500;
+  color: rgb(85, 115, 143);
+}
+
+.time {
+  margin-right: 12px;
+  margin-top: 5px;
+  color: rgb(97, 141, 182);
+  font-size: 12px;
+}
+
+.dm {
+  background: #ffe7ff;
+  border-bottom: 4px solid rgb(255, 177, 250);
+}
+
+.my-dm {
+  background: #ffd1b0;
+  border-bottom: 4px solid rgb(255, 166, 83);
+}
+
+.my-dm-right {
+  display: flex;
+  margin-left: auto;
+}
+
+.dm-left {
+  /* display: flex;
+  margin-right: auto; */
 }
 
 /* .Right:before {
@@ -88,12 +127,7 @@ section {
   top: 0px;
 } */
 
-.chat_input {
-  display: flex;
-  flex-direction: column;
-  /* padding: 30px; */
-}
-
+/* 입,퇴장 공지 */
 .notice {
   text-align: center;
   background-color: rgba(97, 210, 255, 0.2);
@@ -105,42 +139,9 @@ section {
   border-radius: 3px;
 }
 
-.chat_input input {
-  width: 80%;
-  height: 50px;
-  border: none;
-  border-radius: 15px;
-  padding-left: 10px;
-}
-
-.chat_input input::placeholder {
-  font-size: small;
-  padding: 20px;
-  vertical-align: middle;
-}
-
-.sendBtn {
-  position: absolute;
-  border: none;
-  background-color: #43c2e3;
-  background-image: url('/src/assets/send.png');
-  background-size: 25px;
-  background-position: center;
-  background-repeat: no-repeat;
-  border-radius: 25px;
-  width: 50px;
-  height: 50px;
-  margin-bottom: 20px;
-  right: 8%;
-  cursor: pointer;
-}
-
-.chat_input button:hover {
-  transform: scale(1.1);
-}
-
+/* 채팅 로그 추가 되는 곳 */
 .chat-box-body {
-  padding: 0px 150px;
+  padding: 0px 120px;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -157,37 +158,45 @@ section {
   justify-content: center;
 }
 
-.nick {
-  margin-right: 10px;
-  margin-bottom: 5px;
-  font-size: 15px;
-  font-weight: 500;
-  color: rgb(85, 115, 143);
-}
-
-.time {
-  margin-right: 12px;
-  margin-top: 5px;
-  color: rgb(97, 141, 182);
-  font-size: 12px;
-}
-
-.dm {
-  background: #ffe7ff;
-}
-
-.my-dm {
-  background: #ffc79f;
-}
-
-.my-dm-right {
+/* 메세지 입력 */
+.chat_input {
   display: flex;
-  margin-left: auto;
+  flex-direction: column;
 }
 
-.dm-left {
-  /* display: flex;
-  margin-right: auto; */
+.chat_input input {
+  width: 80%;
+  height: 50px;
+  border: none;
+  border-radius: 15px;
+  padding-left: 10px;
+}
+
+.chat_input input::placeholder {
+  font-size: small;
+  padding: 20px;
+  vertical-align: middle;
+}
+
+.chat_input button:hover {
+  transform: scale(1.1);
+}
+
+/* 메세지 전송 버튼 */
+.sendBtn {
+  position: absolute;
+  border: none;
+  background-color: #43c2e3;
+  background-image: url('/src/assets/send.png');
+  background-size: 25px;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 25px;
+  width: 50px;
+  height: 50px;
+  margin-bottom: 20px;
+  right: 8vw;
+  cursor: pointer;
 }
 
 /* .my-dm:before {
@@ -226,12 +235,13 @@ section {
   display: block;
 }
 
+/* 이모지 셀렉 */
 .emoji_btn {
   border-radius: 15px;
   width: 30px;
   height: 30px;
   background-color: transparent;
-  background-image: url('../assets/c.png');
+  background-image: url('../assets/emoji.png');
   opacity: 0.4;
   background-size: 25px;
   background-position: center;
@@ -241,24 +251,26 @@ section {
   margin: 12px 0px;
   z-index: 1;
   margin-left: 53%;
-  right: 12%;
+  right: 13vw;
 }
 
+/* 이모지 피커 */
 .Picker {
   display: block;
   position: absolute;
   margin: -445px 0px 0px 325px;
 }
 
+/* 파일 업로드 이미지 */
 .img img {
-  width: 400px;
+  width: 350px;
 }
 
 .upload_botton {
   position: absolute;
-  border: none;
+  
   background-color: transparent;
-  background-image: url('../assets/d.png');
+  background-image: url('../assets/up.png');
   opacity: 0.5;
   background-size: 25px;
   background-position: center;
@@ -266,25 +278,37 @@ section {
   border-radius: 15px;
   width: 30px;
   height: 30px;
-  right: 15%;
+  right: 16vw;
   cursor: pointer;
   margin: 10px 0px;
+  border: none;
 }
 
+/* 셀렉트 박스 */
 #members {
+  position: absolute;
+  border-radius: 5px;
   width: 80px;
   height: 25px;
+  right: 61%;
+  top: 675px;
+  border: none;
+  color: #4f4f4f;
+  background-color: #ffffff99;
+  padding: 0 5px;
+  font-size: 12px;
 }
 
 .chat_input p {
   margin: 5px;
 }
 
+/* 공지 올리는 버튼 */
 .notice_botton {
   position: absolute;
   border: none;
   background-color: transparent;
-  background-image: url('../assets/a.png');
+  background-image: url('../assets/notice.png');
   opacity: 0.5;
   background-size: 25px;
   background-position: center;
@@ -292,7 +316,218 @@ section {
   border-radius: 15px;
   width: 30px;
   height: 35px;
-  right: 18%;
+  right: 19vw;
   cursor: pointer;
   margin: 10px 0px;
+}
+
+
+.toggle {
+  right: 15%;
+  display: none;
+  position: absolute;
+  border: none;
+}
+
+@media screen and (max-width: 1280px) {
+  #members {
+    right: 60%;
+  }
+}
+
+/*1000px이하*/
+@media screen and (max-width: 1000px) {
+  .notice {
+    font-size: 12px;
+  }
+
+  .chat_log {
+    font-size: 14px;
+  }
+
+  .nick {
+    font-size: 11px;
+  }
+  .time {
+    font-size: 8px;
+  }
+
+  .chat-box-body {
+    padding: 0px 100px;
+  }
+  .sub_btn {
+    display: none;
+  }
+  .toggle {
+    display: block;
+    margin: 10px auto;
+    border-radius: 15px;
+    right: 15vw;
+    width: 30px;
+    height: 30px;
+    border: none;
+  }
+
+  .chatNave img {
+    width: 150px;
+  }
+
+  .chatNave p {
+    font-size: smaller;
+  }
+
+  .chatNave button {
+    width: 35px;
+    height: 35px;
+    border-radius: 20px;
+    background-size: 18px;
+  }
+
+  .sellPage > section > .AvailSaleContainer {
+    margin-top: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+  #members {
+    right: 57%;
+    top: 665px;
+  }
+}
+
+@media screen and (max-width: 880px) {
+  #members {
+    right: 75%;
+  }
+}
+
+@media screen and (max-width: 780px) {
+  .img img {
+    width: 150px;
+  }
+  
+  .notice {
+    font-size: 10px;
+  }
+
+  .chat_log {
+    padding: 8px 8px;
+    font-size: 12px;
+  }
+
+  .toggle {
+    right: 18vw;
+    border: none;
+  }
+  .noticeBtn {
+    display: none;
+  }
+
+  .emojiBtn {
+    right: 15%;
+  }
+
+  .emojiBtn {
+    position: absolute;
+    right: 3vw;
+  }
+  .uploadBtn {
+    position: absolute;
+    right: 9vw;
+  }
+  .sendBtn {
+    background-size: 18px;
+    border-radius: 20px;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 0px;
+    margin: 6px auto;
+    right: 10vw;
+    cursor: pointer;
+  }
+  .chat-box-body {
+    padding: 0px 80px;
+  }
+
+  .chat_log {
+    max-width: 150px;
+  }
+  #members {
+    width: 65px;
+    right: 76%;
+  }
+  .toggle {
+    right: 20vw;
+    border: none;
+  }
+
+  .emojiBtn {
+    position: absolute;
+    right: 5vw;
+    margin: -15px 0;
+  }
+  .uploadBtn {
+    position: absolute;
+    right: 11vw;
+    margin: -15px 0;
+  }
+}
+
+
+@media screen and (max-width: 580px){
+  #members {
+    width: 60px;
+    right: 73%;
+  }
+}
+
+.toggleDiv {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  right: 15vw;
+  top: 92vh;
+  margin-top: -25px;
+  border: none;
+}
+
+.toggleDiv button {
+  border: none;
+}
+
+.emojiBtn {
+  opacity: 0.5;
+  background-color: transparent;
+  background-image: url('../assets/emoji.png');
+  background-size: 25px;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 30px;
+  height: 35px;
+  cursor: pointer;
+}
+
+.uploadBtn {
+  opacity: 0.5;
+  background-color: transparent;
+  background-image: url('../assets/up.png');
+  background-size: 25px;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 30px;
+  height: 35px;
+  cursor: pointer;
+}
+
+.noticeBtn {
+  opacity: 0.7;
+  background-color: transparent;
+  background-image: url('../assets/notice.png');
+  background-size: 25px;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 30px;
+  height: 35px;
+  cursor: pointer;
 }

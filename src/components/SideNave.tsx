@@ -1,6 +1,6 @@
 import React from 'react';
 import './SideNave.css';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import back_cloud from '../assets/back_img.jpg';
 
@@ -10,8 +10,8 @@ interface Alert {
   time: string;
 }
 export default function SideNave() {
+  // 공지 리듀서
   const notice_list = useSelector((state: any) => state.notice);
-  console.log('notice_list 사이드 네브 :', notice_list);
 
   return (
     <div className="sideNave_container">
@@ -19,6 +19,7 @@ export default function SideNave() {
         <img src={back_cloud} alt="구름 배경" />
       </div>
       <p className="al">공지</p>
+      {/* 역순 공지 출력 */}
       <div className="notice_list">
         {notice_list
           .slice(0)

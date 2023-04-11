@@ -1,4 +1,3 @@
-// import express from 'express';
 import * as http from 'http';
 import * as path from 'path';
 import socket from './socket';
@@ -27,7 +26,7 @@ const upload = multer({
     storage: multer.diskStorage({
       destination: function (req:any, file:any, done:any) {
         // 파일 저장경로 uploads
-        done(null, '../public/uploads')
+        done(null, '../build/uploads')
       },
       filename: function (req:any, file:any, done:any) {
         //파일 저장 이름

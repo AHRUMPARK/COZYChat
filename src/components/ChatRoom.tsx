@@ -19,7 +19,6 @@ interface userNameProps {
 }
 
 export default function ChatRoom(props: userNameProps) {
-  // const [issocketID, setIsSocketID] = useState<string[] | null>(null);
   const [nicknameList, setNickname] = useState<string[]>();
   let chatBodyRef = useRef<HTMLDivElement | null>(null);
   let online_members = useRef<HTMLSelectElement>(null);
@@ -55,12 +54,18 @@ export default function ChatRoom(props: userNameProps) {
     let date = today.toLocaleDateString();
     let time = today.toLocaleTimeString('ko-KR', options);
 
-    const alert = {
+    if (input.value == '') {
+      input.focus();
+      alert('공지 메세지를 적어주세요 🥺');
+      return false;
+    }
+
+    const noticeAlert = {
       content: input.value,
       date: date,
       time: time,
     };
-    socket.emit('allNotice', alert);
+    socket.emit('allNotice', noticeAlert);
 
     input.value = '';
   }, []);
@@ -73,9 +78,10 @@ export default function ChatRoom(props: userNameProps) {
     for (var i = 0; i < fileData.length; i++) {
       formData.append('userFile', fileData[i]);
     }
-    console.log('업데이트 요청');
+
+    // http://localhost:3010/userFileUpload
     await axios
-      .post('http://localhost:3010/userFileUpload', formData, {
+      .post('http://49.50.172.207:3010/userFileUpload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data; charset=UTF-8',
           Accept: '*/*',
@@ -95,6 +101,7 @@ export default function ChatRoom(props: userNameProps) {
       });
   };
 
+  // 업로드 버튼
   const onUpload = async () => {
     fileRef.current?.click();
   };
@@ -102,18 +109,17 @@ export default function ChatRoom(props: userNameProps) {
   let userList: string[];
   let my_id: string;
 
+  // socket event
   useEffect(() => {
     socket.emit('username', props.sendName);
 
     // 서버에서 소켓 아이디 받기
     socket.on('info', (socketID: string) => {
-      console.log('소켓아이디 socketID:', socketID);
       my_id = socketID;
     });
 
     // 실시간 디엠 리스트
     socket.on('list', (list) => {
-      console.log('list', list);
       setNickname(list);
 
       // 접속 인원 디엠 셀렉박스 리스트
@@ -134,10 +140,9 @@ export default function ChatRoom(props: userNameProps) {
       div.textContent = msg;
       const notice = chat_box_body.appendChild(div);
       notice.classList.add('notice');
-      // notice.scrollIntoView({ behavior: 'smooth' });
     });
 
-    // 메세지 받기
+    // 메세지 받기 (채팅 로그)
     socket.on(
       'newMSG',
       (json: {
@@ -173,10 +178,10 @@ export default function ChatRoom(props: userNameProps) {
         nickname.textContent = json.username;
         div.textContent = json.msg;
         if (json.from === json.to) {
-          alert('나에게 DM을 보낼 수 없습니다.');
+          alert('나에게 DM을 보낼 수 없습니다. 🥺');
           return false;
         }
-        // 내가 보낸 메세지인지
+        // 내가 보낸 메세지 구별
         if (my_id === json.from) nickname.textContent = json.username;
         div.textContent = json.msg;
         time.textContent = json.times;
@@ -185,8 +190,7 @@ export default function ChatRoom(props: userNameProps) {
         chat_box_body.appendChild(div);
         console.log('마이아이디', my_id);
 
-        // dm 스타일 클래스
-
+        // 클래스네임 다르게 부여
         if (my_id === json.from) {
           // 내가 보내는 디엠
           if (json.is_dm) {
@@ -201,13 +205,13 @@ export default function ChatRoom(props: userNameProps) {
         } else {
           // 다른사람이 보낸 디엠
           if (json.is_dm) {
-            outer_div.classList.add('dm', 'chat_log', 'Left');
-            content_div_name.classList.add('nick', 'dm-left'); // 누가 보낸 디엠
-            content_div_time.classList.add('time', 'dm-left'); // 누가 보낸 디엠
+            outer_div.classList.add('dm', 'chat_log', 'Left'); // 누가 보낸 디엠
+            content_div_name.classList.add('nick', 'dm-left');
+            content_div_time.classList.add('time', 'dm-left');
           } else {
-            outer_div.classList.add('chat_log', 'Left');
-            content_div_name.classList.add('nick'); // 누가 보낸 전체챗
-            content_div_time.classList.add('time'); // 누가 보낸 전체챗
+            outer_div.classList.add('chat_log', 'Left'); // 누가 보낸 전체챗
+            content_div_name.classList.add('nick');
+            content_div_time.classList.add('time');
           }
         }
         content_div_name.appendChild(nickname);
@@ -217,15 +221,14 @@ export default function ChatRoom(props: userNameProps) {
         chat_box_body.appendChild(outer_div);
         chat_box_body.appendChild(content_div_time);
         content_div_time.scrollIntoView({ behavior: 'smooth' });
-        // time.scrollIntoView({ behavior: 'smooth' });
       }
     );
 
+    // 공지를 받으면, reducer로 전달
     socket.on('alretNotice', (alert) => {
       dispatch(add(alert));
     });
   }, []);
-  console.log('nicknameList?', nicknameList);
 
   return (
     <>
@@ -233,7 +236,7 @@ export default function ChatRoom(props: userNameProps) {
         <ChatNave />
         <div className="chatRoom_page">
           <SideNave />
-          {/* 채팅 공간 */}
+
           <div className="chatRoom_container">
             {/* 채팅 로그 구간 */}
             <div className="row">
@@ -244,124 +247,131 @@ export default function ChatRoom(props: userNameProps) {
             <div className="chat_input">
               <div>
                 {/* DM셀렉트 박스 */}
-                <select id="members" defaultValue="전체" ref={online_members}>
-                  <option value="all">전체</option>
-                  {nicknameList &&
-                    Object.entries(nicknameList).map((id, value) => {
-                      return (
-                        <option key={id[0]} value={id[0]}>
-                          {id[1]}
-                        </option>
-                      );
-                    })}
-                </select>
-              </div>
-              <form id="form" encType="multipart/form-data" className="form">
-                <button
-                  type="button"
-                  className="notice_botton sub_btn"
-                  onClick={onNotice}
-                ></button>
-                <button
-                  onClick={(e: any) => {
-                    e.preventDefault(); // 기본 동작 막기
-                    setIsEmoji(!isEmoji);
-                  }}
-                  className={isEmoji ? 'd-none' : 'd-block emoji_btn sub_btn'}
-                ></button>
-                <div className={isEmoji ? 'd-block Picker' : 'd-none'}>
-                  <Picker
-                    data={data}
-                    previewPosition="none"
-                    onEmojiSelect={(e: any) => {
-                      setInput(input + e.native);
-                      setIsEmoji(!isEmoji);
-                    }}
-                  />
+                <div>
+                  <select id="members" defaultValue="전체" ref={online_members}>
+                    <option value="all">전체</option>
+                    {nicknameList &&
+                      Object.entries(nicknameList).map((id, value) => {
+                        return (
+                          <option key={id[0]} value={id[0]}>
+                            {id[1]}
+                          </option>
+                        );
+                      })}
+                  </select>
                 </div>
 
-                <input
-                  type="text"
-                  id="msgBox"
-                  name="msgInput"
-                  placeholder="메세지를 입력하세요.."
-                  onKeyDown={(e: any) => {
-                    if (e.key == 'Enter') {
+                <form id="form" encType="multipart/form-data" className="form">
+                  {/* 공지 */}
+                  <button
+                    type="button"
+                    className="notice_botton sub_btn"
+                    onClick={onNotice}
+                  ></button>
+
+                  {/* 이모지 */}
+                  <button
+                    onClick={(e: any) => {
                       e.preventDefault(); // 기본 동작 막기
-                      btnSend();
-                    }
-                  }}
-                  value={input}
-                  onChange={(e) => {
-                    setInput(e.currentTarget.value);
-                  }}
-                />
-
-                <button
-                  type="button"
-                  className="sendBtn"
-                  onClick={btnSend}
-                ></button>
-
-                {/* 업로드 */}
-                <input
-                  type="file"
-                  name="userFile"
-                  className="d-none"
-                  ref={fileRef}
-                  onChange={onFile}
-                  multiple
-                />
-                <button
-                  type="button"
-                  onClick={(e: any) => {
-                    e.preventDefault();
-                    onUpload();
-                  }}
-                  className="upload_botton sub_btn"
-                ></button>
-                {/* 버튼 토글 */}
-                <button
-                  className="toggle"
-                  type="button"
-                  onClick={() => {
-                    setIsCheck((e) => !e);
-                  }}
-                >
-                  {isCheck ? '-' : '+'}
-                </button>
-                {isCheck && (
-                  <div className="toggleDiv">
-                    <div>
-                      <button
-                        type="button"
-                        className="noticeBtn"
-                        onClick={onNotice}
-                      ></button>
-                    </div>
-                    <div>
-                      <button
-                        onClick={(e: any) => {
-                          e.preventDefault(); // 기본 동작 막기
-                          setIsEmoji(!isEmoji);
-                        }}
-                        className={isEmoji ? 'd-none' : 'd-block emojiBtn'}
-                      ></button>
-                    </div>
-                    <div>
-                      {' '}
-                      <button
-                        type="button"
-                        onClick={(e: any) => {
-                          e.preventDefault();
-                          onUpload();
-                        }}
-                        className="uploadBtn"
-                      ></button>
-                    </div>
+                      setIsEmoji(!isEmoji);
+                    }}
+                    className={isEmoji ? 'd-none' : 'd-block emoji_btn sub_btn'}
+                  ></button>
+                  <div className={isEmoji ? 'd-block Picker' : 'd-none'}>
+                    <Picker
+                      data={data}
+                      previewPosition="none"
+                      onEmojiSelect={(e: any) => {
+                        setInput(input + e.native);
+                        setIsEmoji(!isEmoji);
+                      }}
+                    />
                   </div>
-                )}
-              </form>
+
+                  <input
+                    type="text"
+                    id="msgBox"
+                    name="msgInput"
+                    placeholder="메세지를 입력하세요.."
+                    onKeyDown={(e: any) => {
+                      if (e.key == 'Enter') {
+                        e.preventDefault(); // 기본 동작 막기
+                        btnSend();
+                      }
+                    }}
+                    value={input}
+                    onChange={(e) => {
+                      setInput(e.currentTarget.value);
+                    }}
+                  />
+
+                  <button
+                    type="button"
+                    className="sendBtn"
+                    onClick={btnSend}
+                  ></button>
+
+                  {/* 업로드 */}
+                  <input
+                    type="file"
+                    name="userFile"
+                    className="d-none"
+                    ref={fileRef}
+                    onChange={onFile}
+                    multiple
+                  />
+                  <button
+                    type="button"
+                    onClick={(e: any) => {
+                      e.preventDefault();
+                      onUpload();
+                    }}
+                    className="upload_botton sub_btn"
+                  ></button>
+
+                  {/* 버튼 토글 */}
+                  <button
+                    className="toggle"
+                    type="button"
+                    onClick={() => {
+                      setIsCheck((e) => !e);
+                    }}
+                  >
+                    {isCheck ? '-' : '+'}
+                  </button>
+                  {isCheck && (
+                    <div className="toggleDiv">
+                      <div>
+                        <button
+                          type="button"
+                          className="noticeBtn"
+                          onClick={onNotice}
+                        ></button>
+                      </div>
+                      <div>
+                        <button
+                          onClick={(e: any) => {
+                            e.preventDefault(); // 기본 동작 막기
+                            setIsEmoji(!isEmoji);
+                          }}
+                          className={isEmoji ? 'd-none' : 'd-block emojiBtn'}
+                        ></button>
+                      </div>
+                      <div>
+                        {' '}
+                        <button
+                          type="button"
+                          onClick={(e: any) => {
+                            e.preventDefault();
+                            onUpload();
+                          }}
+                          className="uploadBtn"
+                        ></button>
+                      </div>
+                    </div>
+                  )}
+                </form>
+              </div>
             </div>
           </div>
         </div>

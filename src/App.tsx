@@ -9,8 +9,7 @@ export type userNameProps = {
 };
 
 function App() {
-  const [notice, setNotice] = useState<string | null>(null);
-  // 상태가 null일 수도 있고, 아닐 수도 있다.
+  //start true => 채팅방 입장
   const [start, setStart] = useState<null | boolean>(null);
   const nickNameRef = useRef<HTMLInputElement>(null);
 

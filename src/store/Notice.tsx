@@ -8,7 +8,7 @@ const initalState: Alert[] = [];
 export const ADD = 'ADD';
 
 // 액션 함수 생성
-// payload에는 공지 메세지 받아오고싶다.
+// payload에는 공지 메세지
 export function add(payload: any) {
   return {
     type: ADD,

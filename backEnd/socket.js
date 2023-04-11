@@ -5,7 +5,7 @@ var socket_io_1 = require("socket.io");
 var socket = function (server) {
     var io = new socket_io_1.Server(server, {
         cors: {
-            origin: '*' || 'http://localhost:3000',
+            origin: '*' || 'http://localhost:3000' || 'http://49.50.172.207:3010',
             methods: ['GET', 'POST']
         }
     });
@@ -19,7 +19,7 @@ var socket = function (server) {
         socket.on('username', function (name) {
             // [socket.id] 키 : name 값
             userList[socket.id] = name;
-            console.log('1번 userList=!!!!!!!!:', userList);
+            console.log('userList:', userList);
             io.emit('list', userList);
             // 통신하는 고유 소캣 아이디 클라이언트에게 보내기
             var today = new Date();
@@ -30,12 +30,8 @@ var socket = function (server) {
             io.emit('notice', date + ' ' + ' ' + time);
             io.emit('notice', name + ' 님이 입장하셨습니다.');
         });
+        // 공지 메세지
         socket.on('allNotice', function (noticeMSG) {
-            console.log('공지 오니? : ', noticeMSG);
-            // let today = new Date();
-            // let options: any = { hour: 'numeric', minute: 'numeric' };
-            // let date = today.toLocaleDateString();
-            // let time = today.toLocaleTimeString('ko-KR', options);
             io.emit('alretNotice', noticeMSG);
         });
         // sendMSG 이벤트 json 형태
@@ -47,11 +43,9 @@ var socket = function (server) {
             var options = { hour: 'numeric', minute: 'numeric' };
             var date = today.toLocaleDateString();
             var time = today.toLocaleTimeString('ko-KR', options);
-            // json = { msg : ~~ , from ~~};
-            json['from'] = socket.id;
             // json {msg : ~~~, from : ~~~, to : ~~~}
+            json['from'] = socket.id;
             json['username'] = userList[socket.id];
-            console.log('2번 언제바뀌나 보자 username', userList[socket.id]);
             json['is_dm'] = false; //디엠일때만 true
             json['today'] = date;
             json['times'] = time;
@@ -72,10 +66,9 @@ var socket = function (server) {
         socket.on('disconnect', function () {
             console.log('Server Socket disconnected');
             io.emit('notice', userList[socket.id] + '님이 퇴장 하셨습니다.');
-            // 소켓 리스트 지우는 법
+            // 소켓 유저리스트 삭제
             console.log('delete :', socket.id);
             delete userList[socket.id];
-            // 그것을 다시 클라이언트에게
             io.emit('list', userList);
         });
     });

@@ -36,7 +36,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-// import express from 'express';
 var http = require("http");
 var path = require("path");
 var socket_1 = require("./socket");
@@ -57,7 +56,7 @@ var upload = multer({
     storage: multer.diskStorage({
         destination: function (req, file, done) {
             // 파일 저장경로 uploads
-            done(null, '../public/uploads');
+            done(null, '../build/uploads');
         },
         filename: function (req, file, done) {
             //파일 저장 이름

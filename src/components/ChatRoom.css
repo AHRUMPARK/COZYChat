@@ -6,16 +6,23 @@ section {
 
 * ::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera*/
+  background-color: #ecf9ff;
+}
+
+body {
+  background-color: #ffffff;
 }
 
 .chatRoom_page {
   display: flex;
+  min-width: 600px;
 }
 
 .chatRoom_container {
+  min-width: 500px;
   background-color: #ecf9ff;
   width: 100vw;
-  height: 100vh;
+  /* height: 100%; */
   display: flex;
   flex-direction: column;
   padding: 30px;
@@ -31,7 +38,7 @@ section {
 
 /* 왼쪽 상단 로고 이미지 */
 .chatNave img {
-  width: 200px;
+  width: 130px;
 }
 
 /* 채팅 로그 */
@@ -94,39 +101,6 @@ section {
   margin-left: auto;
 }
 
-.dm-left {
-  /* display: flex;
-  margin-right: auto; */
-}
-
-/* .Right:before {
-  content: '';
-  text-align: right;
-  width: 0px;
-  height: 0px;
-  position: absolute;
-  border-left: 15px solid #00bfb6;
-  border-right: 15px solid transparent;
-  border-top: 15px solid #00bfb6;
-  border-bottom: 15px solid transparent;
-  right: -16px;
-  top: 0px;
-}
-
-.Left:before {
-  content: '';
-  text-align: left;
-  width: 0px;
-  height: 0px;
-  position: absolute;
-  border-left: 15px solid transparent;
-  border-right: 15px solid #9bc3ff;
-  border-top: 15px solid #9bc3ff;
-  border-bottom: 15px solid transparent;
-  left: -16px;
-  top: 0px;
-} */
-
 /* 입,퇴장 공지 */
 .notice {
   text-align: center;
@@ -145,7 +119,7 @@ section {
   display: flex;
   flex-direction: column;
   position: relative;
-  height: 68vh;
+  height: 73vh;
   overflow: auto;
 }
 
@@ -162,20 +136,28 @@ section {
 .chat_input {
   display: flex;
   flex-direction: column;
+  /* align-items: center; */
 }
 
 .chat_input input {
-  width: 80%;
+  width: 58vw;
   height: 50px;
   border: none;
   border-radius: 15px;
   padding-left: 10px;
+  min-width: 365px;
+  margin-bottom: 20px;
+  margin: 0 10%;
 }
 
 .chat_input input::placeholder {
   font-size: small;
   padding: 20px;
   vertical-align: middle;
+}
+
+.chat_input input:focus {
+  outline: solid #71d5ff;
 }
 
 .chat_input button:hover {
@@ -190,6 +172,7 @@ section {
   background-image: url('/src/assets/send.png');
   background-size: 25px;
   background-position: center;
+  background-position-x: 15px;
   background-repeat: no-repeat;
   border-radius: 25px;
   width: 50px;
@@ -198,34 +181,6 @@ section {
   right: 8vw;
   cursor: pointer;
 }
-
-/* .my-dm:before {
-  content: '';
-  text-align: right;
-  width: 0px;
-  height: 0px;
-  position: absolute;
-  border-left: 15px solid #71d7ff;
-  border-right: 15px solid transparent;
-  border-top: 15px solid #71d7ff;
-  border-bottom: 15px solid transparent;
-  right: -16px;
-  top: 0px;
-}
-
-.dm:before {
-  content: '';
-  text-align: left;
-  width: 0px;
-  height: 0px;
-  position: absolute;
-  border-left: 15px solid transparent;
-  border-right: 15px solid #fec3ff;
-  border-top: 15px solid #fec3ff;
-  border-bottom: 15px solid transparent;
-  left: -16px;
-  top: 0px;
-} */
 
 .d-none {
   display: none;
@@ -248,10 +203,11 @@ section {
   background-repeat: no-repeat;
   border: none;
   position: absolute;
-  margin: 12px 0px;
   z-index: 1;
   margin-left: 53%;
   right: 13vw;
+  margin: 10px 10px;
+  cursor: pointer;
 }
 
 /* 이모지 피커 */
@@ -268,7 +224,6 @@ section {
 
 .upload_botton {
   position: absolute;
-  
   background-color: transparent;
   background-image: url('../assets/up.png');
   opacity: 0.5;
@@ -280,25 +235,28 @@ section {
   height: 30px;
   right: 16vw;
   cursor: pointer;
-  margin: 10px 0px;
+  margin: 10px 10px;
   border: none;
 }
 
 /* 셀렉트 박스 */
 #members {
-  position: absolute;
   border-radius: 5px;
   width: 80px;
   height: 25px;
-  right: 61%;
-  top: 675px;
   border: none;
   color: #4f4f4f;
   background-color: #ffffff99;
   padding: 0 5px;
   font-size: 12px;
+  margin-left: 11%;
+  cursor: pointer;
+  margin-bottom: 15px;
 }
 
+option {
+  padding: 10px;
+}
 .chat_input p {
   margin: 5px;
 }
@@ -318,168 +276,16 @@ section {
   height: 35px;
   right: 19vw;
   cursor: pointer;
-  margin: 10px 0px;
+  margin: 10px 10px;
 }
-
 
 .toggle {
   right: 15%;
   display: none;
   position: absolute;
   border: none;
-}
-
-@media screen and (max-width: 1280px) {
-  #members {
-    right: 60%;
-  }
-}
-
-/*1000px이하*/
-@media screen and (max-width: 1000px) {
-  .notice {
-    font-size: 12px;
-  }
-
-  .chat_log {
-    font-size: 14px;
-  }
-
-  .nick {
-    font-size: 11px;
-  }
-  .time {
-    font-size: 8px;
-  }
-
-  .chat-box-body {
-    padding: 0px 100px;
-  }
-  .sub_btn {
-    display: none;
-  }
-  .toggle {
-    display: block;
-    margin: 10px auto;
-    border-radius: 15px;
-    right: 15vw;
-    width: 30px;
-    height: 30px;
-    border: none;
-  }
-
-  .chatNave img {
-    width: 150px;
-  }
-
-  .chatNave p {
-    font-size: smaller;
-  }
-
-  .chatNave button {
-    width: 35px;
-    height: 35px;
-    border-radius: 20px;
-    background-size: 18px;
-  }
-
-  .sellPage > section > .AvailSaleContainer {
-    margin-top: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-  }
-  #members {
-    right: 57%;
-    top: 665px;
-  }
-}
-
-@media screen and (max-width: 880px) {
-  #members {
-    right: 75%;
-  }
-}
-
-@media screen and (max-width: 780px) {
-  .img img {
-    width: 150px;
-  }
-  
-  .notice {
-    font-size: 10px;
-  }
-
-  .chat_log {
-    padding: 8px 8px;
-    font-size: 12px;
-  }
-
-  .toggle {
-    right: 18vw;
-    border: none;
-  }
-  .noticeBtn {
-    display: none;
-  }
-
-  .emojiBtn {
-    right: 15%;
-  }
-
-  .emojiBtn {
-    position: absolute;
-    right: 3vw;
-  }
-  .uploadBtn {
-    position: absolute;
-    right: 9vw;
-  }
-  .sendBtn {
-    background-size: 18px;
-    border-radius: 20px;
-    width: 40px;
-    height: 40px;
-    margin-bottom: 0px;
-    margin: 6px auto;
-    right: 10vw;
-    cursor: pointer;
-  }
-  .chat-box-body {
-    padding: 0px 80px;
-  }
-
-  .chat_log {
-    max-width: 150px;
-  }
-  #members {
-    width: 65px;
-    right: 76%;
-  }
-  .toggle {
-    right: 20vw;
-    border: none;
-  }
-
-  .emojiBtn {
-    position: absolute;
-    right: 5vw;
-    margin: -15px 0;
-  }
-  .uploadBtn {
-    position: absolute;
-    right: 11vw;
-    margin: -15px 0;
-  }
-}
-
-
-@media screen and (max-width: 580px){
-  #members {
-    width: 60px;
-    right: 73%;
-  }
+  font-size: 20px;
+  line-height: 10px;
 }
 
 .toggleDiv {
@@ -487,8 +293,7 @@ section {
   display: flex;
   flex-direction: column;
   right: 15vw;
-  top: 92vh;
-  margin-top: -25px;
+  margin-top: 50px;
   border: none;
 }
 
@@ -530,4 +335,208 @@ section {
   width: 30px;
   height: 35px;
   cursor: pointer;
+}
+
+.uploadBtn {
+  display: none;
+}
+
+.noticeBtn {
+  display: none;
+}
+
+.emojiBtn {
+  display: none;
+}
+
+/* 반응형 */
+@media screen and (min-width: 1300px) {
+  .emoji_btn {
+    right: 12vw;
+  }
+
+  .upload_botton {
+    right: 14vw;
+  }
+
+  .notice_botton {
+    right: 16vw;
+  }
+}
+
+/*1000px이하*/
+@media screen and (max-width: 1000px) {
+  .uploadBtn {
+    display: block;
+  }
+  .noticeBtn {
+    display: block;
+  }
+
+  .emojiBtn {
+    display: block;
+  }
+
+  .notice {
+    font-size: 12px;
+  }
+
+  .chat_log {
+    font-size: 14px;
+  }
+
+  .nick {
+    font-size: 11px;
+  }
+  .time {
+    font-size: 8px;
+  }
+
+  .chat-box-body {
+    padding: 0px 100px;
+  }
+  .sub_btn {
+    display: none;
+  }
+  .toggle {
+    display: block;
+    margin: 10px auto;
+    border-radius: 15px;
+    right: 15vw;
+    width: 30px;
+    height: 30px;
+    border: none;
+  }
+
+  /* .chatNave img {
+    width: 150px;
+  } */
+
+  .chatNave p {
+    font-size: smaller;
+  }
+
+  .chatNave button {
+    width: 35px;
+    height: 35px;
+    border-radius: 20px;
+    background-size: 18px;
+    background-position-x: 10px;
+  }
+
+  .sellPage > section > .AvailSaleContainer {
+    margin-top: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+  #members {
+    right: 57%;
+  }
+}
+
+@media screen and (max-width: 880px) {
+  #members {
+    right: 75%;
+  }
+  .toggleDiv {
+    right: 25%;
+  }
+
+  .chat_input input::placeholder {
+    font-size: 9px;
+  }
+}
+
+@media screen and (max-width: 879px) {
+  .chatRoom_container {
+    height: 87.5vh;
+  }
+
+  .sendBtn {
+    margin: 0px auto;
+    right: 17vw;
+  }
+
+  .toggle {
+    right: 25vw;
+  }
+
+  #members {
+    margin-left: 20%;
+  }
+}
+
+@media screen and (max-width: 780px) {
+  .img img {
+    width: 150px;
+  }
+
+  .notice {
+    font-size: 10px;
+  }
+
+  .chat_log {
+    padding: 8px 8px;
+    font-size: 12px;
+  }
+
+  .toggle {
+    right: 18vw;
+    border: none;
+  }
+  .noticeBtn {
+    display: none;
+  }
+
+  .chat-box-body {
+    padding: 0px 80px;
+  }
+
+  .chat_log {
+    max-width: 150px;
+  }
+  #members {
+    width: 65px;
+    right: 68vw;
+  }
+
+  .toggle {
+    right: 26vw;
+    border: none;
+  }
+
+  .emojiBtn {
+    position: absolute;
+    right: 1vw;
+    margin: 2px 0;
+  }
+  .uploadBtn {
+    position: absolute;
+    right: 6vw;
+    margin: 0;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  #members {
+    position: relative;
+    right: 43px;
+  }
+  .toggle {
+    position: relative;
+    right: 160px;
+    min-width: 30px;
+  }
+  .sendBtn {
+    position: relative;
+    background-size: 18px;
+    background-position-x: 8px;
+    right: 80px;
+    min-width: 35px;
+    min-height: 52px;
+    border-radius: 3px;
+    /* margin: 5px 30px; */
+  }
 }

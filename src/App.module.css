@@ -1,21 +1,20 @@
-/* .main_container {
-  width: 100%;
-  height: 100%;
-} */
-
 .backImg {
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    animation-name: backImg;
-    animation-duration: 8s;
-    animation-iteration-count: infinite;
-    object-fit: cover;
+  height: 55vw;
+  width: 100vw;
+  background-size: cover;
+  animation-name: backImg;
+  animation-duration: 10s;
+  animation-iteration-count: infinite;
+  object-fit: cover;
 }
 
 @keyframes backImg {
-  0%   {transform:  translatey(0px)}
-  50%  {transform: translatey(-20px)}
+  0% {
+    transform: translatey(0px);
+  }
+  50% {
+    transform: translatey(-30px);
+  }
 }
 
 .info_container {
@@ -44,7 +43,7 @@
 }
 
 .margin input {
-  width: 18vw;
+  width: 15vw;
   height: 40px;
   background-color: rgba(255, 255, 255, 0);
   border: none;
@@ -57,31 +56,33 @@
 .margin input::placeholder {
   font-size: small;
   text-align: center;
-  vertical-align:middle;
+  font-size: 15px;
+  vertical-align: middle;
 }
 
-.margin input:hover {
+.margin input:focus {
   border-radius: 5px;
   border: none;
   outline: solid #71d5ff;
 }
 
 .margin button {
-    color: #565656;
-    font-size: 14px;
-    font-weight: 550;
-    width: 12vw;
-    height: 50px;
-    background-color: #B7E1F3;
-    border: none;
-    border-radius: 35px;
-    box-shadow: 3px 3px 6px rgba(63, 80, 97, 0.3);
-    cursor: pointer;
-    outline: none;
+  color: #565656;
+  font-size: 16px;
+  font-weight: 550;
+  width: 10vw;
+  height: 50px;
+  background-color: #b7e1f3;
+  border: none;
+  border-radius: 35px;
+  box-shadow: 3px 3px 6px rgba(63, 80, 97, 0.3);
+  cursor: pointer;
+  outline: none;
+  min-width: 110px;
 }
 
 .margin button:hover {
-  background-color: #FFAF9C;
+  background-color: #ffaf9c;
   box-shadow: 3px 3px 6px rgba(229, 46, 52, 0.3);
   color: #fff;
 }
@@ -93,33 +94,37 @@
 }
 
 * {
-  font-family: "Pretendard-Regular";
+  font-family: 'Pretendard-Regular';
 }
 
 @font-face {
-    font-family: 'EarlyFontDiary';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_220508@1.0/EarlyFontDiary.woff2') format('woff2');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'EarlyFontDiary';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_220508@1.0/EarlyFontDiary.woff2')
+    format('woff2');
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'Cafe24SsurroundAir';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24SsurroundAir.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'Cafe24SsurroundAir';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24SsurroundAir.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'yg-jalnan';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.2/JalnanOTF00.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'yg-jalnan';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.2/JalnanOTF00.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'Pretendard-Regular';
-    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
-    font-weight: 400;
-    font-style: normal;
+  font-family: 'Pretendard-Regular';
+  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff')
+    format('woff');
+  font-weight: 400;
+  font-style: normal;
 }

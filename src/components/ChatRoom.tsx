@@ -281,6 +281,7 @@ export default function ChatRoom(props: userNameProps) {
                     <Picker
                       data={data}
                       previewPosition="none"
+                      // dynamicWidth="true"
                       onEmojiSelect={(e: any) => {
                         setInput(input + e.native);
                         setIsEmoji(!isEmoji);

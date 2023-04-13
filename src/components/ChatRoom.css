@@ -15,17 +15,15 @@ body {
 
 .chatRoom_page {
   display: flex;
-  min-width: 600px;
+  height: 100vh;
 }
 
 .chatRoom_container {
-  min-width: 500px;
   background-color: #ecf9ff;
-  width: 100vw;
-  /* height: 100%; */
   display: flex;
   flex-direction: column;
-  padding: 30px;
+  padding: 90px 30px 0 0;
+  width: 100vw;
 }
 
 /* chatNave */
@@ -136,6 +134,7 @@ body {
 .chat_input {
   display: flex;
   flex-direction: column;
+
   /* align-items: center; */
 }
 
@@ -145,7 +144,7 @@ body {
   border: none;
   border-radius: 15px;
   padding-left: 10px;
-  min-width: 365px;
+  min-width: 400px;
   margin-bottom: 20px;
   margin: 0 10%;
 }
@@ -214,7 +213,7 @@ body {
 .Picker {
   display: block;
   position: absolute;
-  margin: -445px 0px 0px 325px;
+  margin: -445px 0 0 400px;
 }
 
 /* 파일 업로드 이미지 */
@@ -241,17 +240,17 @@ body {
 
 /* 셀렉트 박스 */
 #members {
-  border-radius: 5px;
-  width: 80px;
-  height: 25px;
-  border: none;
-  color: #4f4f4f;
   background-color: #ffffff99;
-  padding: 0 5px;
-  font-size: 12px;
-  margin-left: 11%;
+  border: none;
+  border-radius: 5px;
+  color: #4f4f4f;
   cursor: pointer;
-  margin-bottom: 15px;
+  font-size: 12px;
+  height: 25px;
+  margin-bottom: 10px;
+  margin-left: 11%;
+  padding: 0 5px;
+  width: 80px;
 }
 
 option {
@@ -293,7 +292,7 @@ option {
   display: flex;
   flex-direction: column;
   right: 15vw;
-  margin-top: 50px;
+  margin-top: -105px;
   border: none;
 }
 
@@ -450,13 +449,14 @@ option {
 }
 
 @media screen and (max-width: 879px) {
-  .chatRoom_container {
-    height: 87.5vh;
+  .Picker {
+    margin: -445px 0 0 120px;
+    z-index: 10;
   }
-
+  
   .sendBtn {
     margin: 0px auto;
-    right: 17vw;
+    right: 18vw;
   }
 
   .toggle {
@@ -469,6 +469,9 @@ option {
 }
 
 @media screen and (max-width: 780px) {
+  .form {
+    justify-content: center;
+  }
   .img img {
     width: 150px;
   }
@@ -520,6 +523,14 @@ option {
 }
 
 @media screen and (max-width: 600px) {
+  .chat_input {
+    padding-bottom: 40px;
+  }
+
+  .form {
+    justify-content: flex-start;
+  }
+
   #members {
     position: relative;
     right: 43px;
@@ -532,9 +543,9 @@ option {
   .sendBtn {
     position: relative;
     background-size: 18px;
-    background-position-x: 8px;
-    right: 80px;
-    min-width: 35px;
+    background-position-x: 10px;
+    right: 65px;
+    min-width: 40px;
     min-height: 52px;
     border-radius: 3px;
     /* margin: 5px 30px; */
